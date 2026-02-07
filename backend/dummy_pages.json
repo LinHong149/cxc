@@ -1,0 +1,72 @@
+[
+    {
+      "doc_id": "doc_000001",
+      "source_type": "pdf",
+      "source_uri": "s3://bucket/casefile_000001.pdf",
+      "page_id": "doc_000001#p01",
+      "text": "On April 12, 2004, John Doe met Jane Smith at the Palm Beach Marriott in Florida. The meeting began at 3:00 PM and lasted two hours."
+    },
+    {
+      "doc_id": "doc_000001",
+      "source_type": "pdf",
+      "source_uri": "s3://bucket/casefile_000001.pdf",
+      "page_id": "doc_000001#p02",
+      "text": "Jane Smith later contacted attorney Robert Miller of Miller & Associates LLP. The call took place on April 15, 2004."
+    },
+    {
+      "doc_id": "doc_000002",
+      "source_type": "email",
+      "source_uri": "s3://bucket/email_export_000002.pdf",
+      "page_id": "doc_000002#p01",
+      "text": "From: jdoe@email.com\nTo: janesmith@gmail.com\nDate: May 3, 2005\nSubject: Flight to New York\n\nHi Jane,\nI will be arriving at JFK Airport on Delta Flight DL203 at 9:30 AM.\nBest,\nJohn"
+    },
+    {
+      "doc_id": "doc_000002",
+      "source_type": "email",
+      "source_uri": "s3://bucket/email_export_000002.pdf",
+      "page_id": "doc_000002#p02",
+      "text": "Jane Smith forwarded the itinerary to Michael Johnson at Goldman Sachs in Manhattan, New York."
+    },
+    {
+      "doc_id": "doc_000003",
+      "source_type": "image",
+      "source_uri": "s3://bucket/scan_000003.png",
+      "page_id": "doc_000003#p01",
+      "text": "RECEIPT\nPalm Beach Luxury Rentals\nCustomer: John Doe\nDate: 06/12/2004\nTotal Amount: $12,500\nPayment Method: American Express"
+    },
+    {
+      "doc_id": "doc_000004",
+      "source_type": "pdf",
+      "source_uri": "s3://bucket/interview_notes_000004.pdf",
+      "page_id": "doc_000004#p01",
+      "text": "Witness statement recorded in Miami, Florida. Officer Sarah Williams interviewed Jane Smith on July 8, 2006 regarding events at Mar-a-Lago."
+    },
+    {
+      "doc_id": "doc_000005",
+      "source_type": "web",
+      "source_uri": "s3://bucket/news_scrape_000005.html",
+      "page_id": "doc_000005#p01",
+      "text": "The New York Times reported that financier Jeffrey Epstein hosted multiple guests in Palm Beach between 2002 and 2005."
+    },
+    {
+      "doc_id": "doc_000006",
+      "source_type": "pdf",
+      "source_uri": "s3://bucket/flight_logs_000006.pdf",
+      "page_id": "doc_000006#p01",
+      "text": "Flight Log Entry:\nPassenger: Jane Smith\nRoute: Palm Beach, FL → Paris, France\nDate: September 21, 2005\nAircraft ID: N908JE"
+    },
+    {
+      "doc_id": "doc_000007",
+      "source_type": "email",
+      "source_uri": "s3://bucket/email_export_000007.pdf",
+      "page_id": "doc_000007#p01",
+      "text": "From: robert.miller@lawfirm.com\nTo: john.doe@email.com\nDate: October 2, 2006\n\nJohn,\nPlease meet me at the Federal Courthouse in West Palm Beach tomorrow.\n\nRegards,\nRobert Miller"
+    },
+    {
+      "doc_id": "doc_000008",
+      "source_type": "pdf",
+      "source_uri": "s3://bucket/contracts_000008.pdf",
+      "page_id": "doc_000008#p01",
+      "text": "This agreement is made between Palm Beach Properties Inc. and Jane Smith on January 5, 2007. The contract value is $3,200,000."
+    }
+  ]

@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import GraphVisualization from '@/components/GraphVisualization';
 import TimelineSlider from '@/components/TimelineSlider';
+import FlightGlobe from '@/components/FlightGlobe';
 import EvidencePanel from '@/components/EvidencePanel';
 import ChatPanel from '@/components/ChatPanel';
 
@@ -49,7 +50,7 @@ interface GraphData {
   };
 }
 
-export default function ResultsPage() {
+function ResultsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [graphData, setGraphData] = useState<GraphData | null>(null);
@@ -475,6 +476,14 @@ export default function ResultsPage() {
             maxDate={graphData.timeline_range.end}
             onChange={handleTimelineChange}
           />
+
+          <div style={{ marginTop: '20px' }}>
+            <FlightGlobe
+              timelineStart={timelineStart}
+              timelineEnd={timelineEnd}
+              selectedFile={selectedFile}
+            />
+          </div>
         </div>
 
         {/* Main Graph Area */}
@@ -542,5 +551,32 @@ export default function ResultsPage() {
         />
       )}
     </div>
+  );
+}
+
+export default function ResultsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{
+            minHeight: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#d4a574',
+          }}
+        >
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>🕵️</div>
+            <div style={{ fontSize: '18px', color: '#654321', fontFamily: "'Courier New', monospace" }}>
+              Loading investigation board...
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <ResultsPageContent />
+    </Suspense>
   );
 }

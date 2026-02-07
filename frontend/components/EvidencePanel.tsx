@@ -121,7 +121,7 @@ export default function EvidencePanel({ title, evidence, onClose }: EvidencePane
                   {item.timestamp && ` • ${formatDate(item.timestamp)}`}
                 </div>
                 <div style={{ fontSize: '13px', lineHeight: '1.7', color: '#2c1810', fontFamily: "'Courier New', monospace" }}>
-                  "{item.snippet}"
+                  &ldquo;{item.snippet}&rdquo;
                 </div>
               </div>
             ))}

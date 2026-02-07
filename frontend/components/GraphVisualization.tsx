@@ -191,7 +191,7 @@ export default function GraphVisualization({
 
     console.log('GraphVisualization: Setting nodes', layoutNodes.length);
     setNodes(layoutNodes);
-  }, [nodes, setNodes, setEdges]);
+  }, [nodes, setNodes]);
 
   // Convert our edges to ReactFlow format
   useEffect(() => {
@@ -273,7 +273,7 @@ export default function GraphVisualization({
           No entities found
         </div>
         <div style={{ fontSize: '14px', textAlign: 'center', maxWidth: '400px' }}>
-          The PDF parser didn't find any entities (people, organizations, locations) in the document.
+          The PDF parser didn&apos;t find any entities (people, organizations, locations) in the document.
           This might be because the entity extraction is using basic pattern matching.
         </div>
       </div>

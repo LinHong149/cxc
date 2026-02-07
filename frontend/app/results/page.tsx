@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import GraphVisualization from '@/components/GraphVisualization';
 import TimelineSlider from '@/components/TimelineSlider';
@@ -50,22 +50,27 @@ interface GraphData {
 export default function ResultsPage() {
   const router = useRouter();
   const [graphData, setGraphData] = useState<GraphData | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [graphLoading, setGraphLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [dateStart, setDateStart] = useState<string | null>(null);
-  const [dateEnd, setDateEnd] = useState<string | null>(null);
+  const [timelineStart, setTimelineStart] = useState<string | null>(null);
+  const [timelineEnd, setTimelineEnd] = useState<string | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEvidence, setShowEvidence] = useState(false);
 
+  const hasLoadedOnce = useRef(false);
+
   const fetchGraphData = useCallback(async () => {
-    setLoading(true);
+    const isInitial = !hasLoadedOnce.current;
+    if (isInitial) setInitialLoading(true);
+    else setGraphLoading(true);
     setError(null);
 
     try {
       const params = new URLSearchParams();
-      if (dateStart) params.append('date_start', dateStart);
-      if (dateEnd) params.append('date_end', dateEnd);
+      if (timelineStart) params.append('date_start', timelineStart);
+      if (timelineEnd) params.append('date_end', timelineEnd);
 
       const response = await fetch(`/api/graph?${params.toString()}`);
       const data = await response.json();
@@ -75,20 +80,22 @@ export default function ResultsPage() {
       }
 
       setGraphData(data);
+      hasLoadedOnce.current = true;
     } catch (err: any) {
       setError(err.message || 'An error occurred');
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
+      setGraphLoading(false);
     }
-  }, [dateStart, dateEnd]);
+  }, [timelineStart, timelineEnd]);
 
   useEffect(() => {
     fetchGraphData();
   }, [fetchGraphData]);
 
-  const handleDateRangeChange = useCallback((start: string | null, end: string | null) => {
-    setDateStart(start);
-    setDateEnd(end);
+  const handleTimelineChange = useCallback((start: string | null, end: string | null) => {
+    setTimelineStart(start);
+    setTimelineEnd(end);
   }, []);
 
   const handleNodeClick = useCallback((node: GraphNode) => {
@@ -136,7 +143,7 @@ export default function ResultsPage() {
     return { title: 'Evidence', evidence: [] };
   };
 
-  if (loading) {
+  if (initialLoading) {
     return (
       <div
         style={{
@@ -336,11 +343,11 @@ export default function ResultsPage() {
           }}
         >
           <TimelineSlider
-            startDate={dateStart}
-            endDate={dateEnd}
+            startValue={timelineStart}
+            endValue={timelineEnd}
             minDate={graphData.timeline_range.start}
             maxDate={graphData.timeline_range.end}
-            onDateRangeChange={handleDateRangeChange}
+            onChange={handleTimelineChange}
           />
         </div>
 
@@ -358,9 +365,32 @@ export default function ResultsPage() {
             minHeight: 0,
           }}
         >
+          {graphLoading && (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(212, 165, 116, 0.9)',
+                borderRadius: '8px',
+                zIndex: 10,
+                fontFamily: "'Courier New', monospace",
+              }}
+            >
+              <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '36px', marginBottom: '12px' }}>🕵️</div>
+                <div style={{ fontSize: '14px', fontWeight: '700', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Loading graph...
+                </div>
+              </div>
+            </div>
+          )}
           <GraphVisualization
             nodes={graphData.nodes}
             edges={graphData.edges}
+            timelineRange={graphData.timeline_range}
             onNodeClick={handleNodeClick}
             onEdgeClick={handleEdgeClick}
           />

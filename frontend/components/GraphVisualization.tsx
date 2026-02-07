@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { format, parseISO } from 'date-fns';
 import ReactFlow, {
   Node,
   Edge,
@@ -45,8 +46,17 @@ interface GraphEdge {
 interface GraphVisualizationProps {
   nodes: GraphNode[];
   edges: GraphEdge[];
+  timelineRange?: { start: string | null; end: string | null };
   onNodeClick?: (node: GraphNode) => void;
   onEdgeClick?: (edge: GraphEdge) => void;
+}
+
+function formatDate(dateStr: string): string {
+  try {
+    return format(parseISO(dateStr), 'MMM d, yyyy');
+  } catch {
+    return dateStr;
+  }
 }
 
 // Custom node component - Detective Board Style
@@ -131,9 +141,19 @@ const EntityNode = ({ data }: { data: GraphNode }) => {
         <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '6px', color: '#2c1810' }}>
           {data.label || data.name}
         </div>
-        <div style={{ fontSize: '10px', color: '#6b4423', borderTop: `1px solid ${color}`, paddingTop: '6px', marginTop: '6px' }}>
-          {data.mention_count} {data.mention_count === 1 ? 'mention' : 'mentions'}
-        </div>
+        {(data.first_seen || data.last_seen) ? (
+          <div style={{ fontSize: '10px', color: '#6b4423', borderTop: `1px solid ${color}`, paddingTop: '6px', marginTop: '6px' }}>
+            {data.first_seen && data.last_seen
+              ? `${formatDate(data.first_seen)} – ${formatDate(data.last_seen)}`
+              : data.first_seen
+              ? `From ${formatDate(data.first_seen)}`
+              : `Until ${formatDate(data.last_seen!)}`}
+          </div>
+        ) : (
+          <div style={{ fontSize: '10px', color: '#6b4423', borderTop: `1px solid ${color}`, paddingTop: '6px', marginTop: '6px' }}>
+            {data.mention_count} {data.mention_count === 1 ? 'mention' : 'mentions'}
+          </div>
+        )}
       </div>
       <Handle type="source" position={Position.Bottom} style={{ background: color, width: '8px', height: '8px' }} />
     </div>
@@ -147,13 +167,15 @@ const nodeTypes: NodeTypes = {
 export default function GraphVisualization({
   nodes,
   edges,
+  timelineRange,
   onNodeClick,
   onEdgeClick,
 }: GraphVisualizationProps) {
   const [reactFlowNodes, setNodes, onNodesChange] = useNodesState([]);
   const [reactFlowEdges, setEdges, onEdgesChange] = useEdgesState([]);
+  const positionCache = useRef<Map<string, { x: number; y: number }>>(new Map());
 
-  // Convert our nodes to ReactFlow format
+  // Convert our nodes to ReactFlow format - random layout with position cache
   useEffect(() => {
     if (nodes.length === 0) {
       setNodes([]);
@@ -161,36 +183,32 @@ export default function GraphVisualization({
       return;
     }
 
-    console.log('GraphVisualization: Processing nodes', nodes.length, 'edges', edges.length);
+    const PADDING = 80;
+    const AREA_WIDTH = 1200;
+    const AREA_HEIGHT = 900;
+    const cache = positionCache.current;
 
-    const flowNodes: Node[] = nodes.map((node, index) => ({
-      id: node.id,
-      type: 'entity',
-      position: {
-        x: Math.random() * 800 + 100,
-        y: Math.random() * 600 + 100,
-      },
-      data: {
-        ...node,
-        label: node.label || node.name, // Ensure label is set
-      },
-    }));
-
-    // Simple force-directed layout (can be improved with d3-force)
-    const layoutNodes = flowNodes.map((node, i) => {
-      const angle = (2 * Math.PI * i) / flowNodes.length;
-      const radius = Math.min(300, 200 + flowNodes.length * 10);
+    const flowNodes: Node[] = nodes.map((node) => {
+      let pos = cache.get(node.id);
+      if (!pos) {
+        pos = {
+          x: PADDING + Math.random() * AREA_WIDTH,
+          y: PADDING + Math.random() * AREA_HEIGHT,
+        };
+        cache.set(node.id, pos);
+      }
       return {
-        ...node,
-        position: {
-          x: 400 + radius * Math.cos(angle),
-          y: 300 + radius * Math.sin(angle),
+        id: node.id,
+        type: 'entity',
+        position: pos,
+        data: {
+          ...node,
+          label: node.label || node.name,
         },
       };
     });
 
-    console.log('GraphVisualization: Setting nodes', layoutNodes.length);
-    setNodes(layoutNodes);
+    setNodes(flowNodes);
   }, [nodes, setNodes]);
 
   // Convert our edges to ReactFlow format
@@ -199,8 +217,6 @@ export default function GraphVisualization({
       setEdges([]);
       return;
     }
-
-    console.log('GraphVisualization: Processing edges', edges.length);
 
     const flowEdges: Edge[] = edges.map((edge) => ({
       id: edge.id,
@@ -228,7 +244,6 @@ export default function GraphVisualization({
       data: edge,
     }));
 
-    console.log('GraphVisualization: Setting edges', flowEdges.length);
     setEdges(flowEdges);
   }, [edges, setEdges]);
 

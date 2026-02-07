@@ -155,9 +155,31 @@ export async function GET(request: NextRequest) {
     const dateStart = searchParams.get('date_start');
     const dateEnd = searchParams.get('date_end');
 
+    // Check if we're in Vercel environment
+    const isVercel = process.env.VERCEL === '1';
+    
     // Read output.json
+    // On Vercel, we can't access files outside the project
+    // For now, try to read from project root, but this won't work on Vercel
+    // In production, you'd want to use a database or storage service
+    let outputPath: string;
+    
+    if (isVercel) {
+      // On Vercel, try to read from a public/data directory or use environment variable
+      // For now, return a helpful error message
+      return NextResponse.json(
+        { 
+          error: 'Graph data is not available on Vercel. The output.json file is not accessible in serverless environment.',
+          suggestion: 'Consider using a database (PostgreSQL, MongoDB) or storage service (S3, Vercel Blob) to store parsed data.'
+        },
+        { status: 404 }
+      );
+    }
+    
+    // Local execution
     const projectRoot = path.resolve(process.cwd(), '..');
-    const outputPath = path.join(projectRoot, 'output.json');
+    outputPath = path.join(projectRoot, 'output.json');
+    
     let pages: PageData[];
     
     try {

@@ -3,12 +3,12 @@
 import { useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { parseISO } from "date-fns";
-import TimelineSlider from "@/components/TimelineSlider";
-import EvidencePanel from "@/components/EvidencePanel";
-import type { GraphResponse, GraphNode, GraphEdge, EvidenceResponse } from "@/types";
+import TimelineSlider from "../components/TimelineSlider";
+import EvidencePanel from "../components/EvidencePanel";
+import type { GraphResponse, GraphNode, GraphEdge, EvidenceResponse } from "../types";
 
 const GraphVisualization = dynamic(
-  () => import("@/components/GraphVisualization"),
+  () => import("../components/GraphVisualization"),
   { ssr: false }
 );
 

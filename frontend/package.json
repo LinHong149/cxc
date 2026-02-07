@@ -9,13 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.21",
     "d3-force": "^3.0.0",
     "date-fns": "^3.0.0",
+    "leaflet": "^1.9.4",
     "next": "^16.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "reactflow": "^11.11.0",
     "openai": "^4.0.0"
+=======
+    "react-leaflet": "^4.2.1",
+    "reactflow": "^11.11.0"
+>>>>>>> 1b32b20 (Graph strength)
   },
   "devDependencies": {
     "@types/node": "^20",

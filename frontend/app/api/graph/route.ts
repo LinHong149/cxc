@@ -13,6 +13,7 @@ interface GraphNode {
   last_seen?: string;
   documents: string[];
   image?: string;
+  geo?: { lat?: number; lng?: number; city?: string; country?: string; admin_area?: string; neighborhood?: string };
 }
 
 interface GraphEdge {
@@ -35,6 +36,7 @@ interface OutputEntity {
   type: string;
   name: string;
   aliases?: string[];
+  geo?: { lat?: number; lng?: number; city?: string; country?: string; admin_area?: string; neighborhood?: string };
   source_refs?: Array<{ source_id: string; page: number; evidence: string }>;
 }
 
@@ -131,6 +133,7 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
       first_seen: undefined,
       last_seen: undefined,
       documents: [...new Set((e.source_refs || []).map((r) => r.source_id))],
+      geo: e.geo,
     });
   }
 

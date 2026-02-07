@@ -246,7 +246,9 @@
       ],
       "geo": {
         "country": "US",
-        "admin_area": "NY"
+        "admin_area": "NY",
+        "lat": 40.7128,
+        "lng": -74.006
       },
       "source_refs": [
         {
@@ -267,7 +269,9 @@
         "country": "US",
         "admin_area": "NY",
         "city": "New York",
-        "neighborhood": "Upper East Side, Manhattan"
+        "neighborhood": "Upper East Side, Manhattan",
+        "lat": 40.7736,
+        "lng": -73.9566
       },
       "attributes": {
         "description": "Multi-story private residence on the Upper East Side of Manhattan, New York (as alleged)"
@@ -290,7 +294,9 @@
       "geo": {
         "country": "US",
         "admin_area": "FL",
-        "city": "Palm Beach"
+        "city": "Palm Beach",
+        "lat": 26.7056,
+        "lng": -80.0364
       },
       "attributes": {
         "description": "Estate in Palm Beach, Florida (as alleged)"
@@ -313,7 +319,9 @@
       "geo": {
         "country": "US",
         "admin_area": "NM",
-        "city": "Santa Fe (vicinity)"
+        "city": "Santa Fe (vicinity)",
+        "lat": 35.687,
+        "lng": -105.9378
       },
       "attributes": {
         "description": "Ranch in Santa Fe, New Mexico (as alleged)"
@@ -337,7 +345,9 @@
       "geo": {
         "country": "UK",
         "admin_area": "England",
-        "city": "London"
+        "city": "London",
+        "lat": 51.5074,
+        "lng": -0.1278
       },
       "source_refs": [
         {
@@ -356,7 +366,9 @@
       ],
       "geo": {
         "country": "US",
-        "admin_area": "FL"
+        "admin_area": "FL",
+        "lat": 27.6648,
+        "lng": -81.5158
       },
       "source_refs": [
         {
@@ -377,7 +389,9 @@
       "geo": {
         "country": "US",
         "admin_area": "NY",
-        "city": "New York"
+        "city": "New York",
+        "lat": 40.7128,
+        "lng": -74.006
       },
       "source_refs": [
         {
@@ -396,7 +410,9 @@
       ],
       "geo": {
         "country": "US",
-        "admin_area": "NM"
+        "admin_area": "NM",
+        "lat": 34.5199,
+        "lng": -105.8701
       },
       "source_refs": [
         {
@@ -417,7 +433,9 @@
       "geo": {
         "country": "UK",
         "admin_area": "England",
-        "city": "London"
+        "city": "London",
+        "lat": 51.5074,
+        "lng": -0.1278
       },
       "source_refs": [
         {

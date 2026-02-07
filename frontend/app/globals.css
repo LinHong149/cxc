@@ -1,3 +1,5 @@
+@import 'leaflet/dist/leaflet.css';
+
 * {
     box-sizing: border-box;
     padding: 0;
@@ -76,6 +78,18 @@ body {
     border-left: 4px solid #8b6f47;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     position: relative;
+}
+
+/* Place node map - compact zoom controls */
+.place-node-map .leaflet-control-zoom {
+    transform: scale(0.7);
+    transform-origin: top right;
+}
+.place-node-map .leaflet-control-zoom a {
+    width: 20px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    font-size: 14px !important;
 }
 
 .evidence-file::after {

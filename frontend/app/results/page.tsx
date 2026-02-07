@@ -16,6 +16,7 @@ interface GraphNode {
   first_seen?: string;
   last_seen?: string;
   documents: string[];
+  geo?: { lat?: number; lng?: number; city?: string; country?: string; admin_area?: string; neighborhood?: string };
 }
 
 interface GraphEdge {

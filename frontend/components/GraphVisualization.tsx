@@ -30,6 +30,7 @@ interface GraphNode {
   last_seen?: string;
   documents: string[];
   image?: string;
+  geo?: { lat?: number; lng?: number; city?: string; country?: string; admin_area?: string; neighborhood?: string };
 }
 
 interface GraphEdge {
@@ -168,6 +169,135 @@ const EntityNode = ({ data, selected }: { data: GraphNode; selected?: boolean })
   );
 };
 
+// Location/place node with embedded map
+const PlaceNode = ({ data }: { data: GraphNode }) => {
+  const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<{ remove: () => void } | null>(null);
+
+  const loc = data.geo;
+  const lat = loc?.lat ?? 40.7128;
+  const lng = loc?.lng ?? -74.006;
+  const hasCoords = loc?.lat != null && loc?.lng != null;
+  const locationLine = [loc?.neighborhood, loc?.city, loc?.admin_area, loc?.country]
+    .filter(Boolean)
+    .join(', ');
+
+  useEffect(() => {
+    const container = mapRef.current;
+    if (!container || typeof window === 'undefined') return;
+
+    let mounted = true;
+    import('leaflet').then((L) => {
+      if (!mounted || !container) return;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+
+      delete (L.Icon.Default.prototype as unknown as { _getIconUrl?: unknown })._getIconUrl;
+      L.Icon.Default.mergeOptions({
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      });
+
+      const map = L.map(container, {
+        zoomControl: false,
+        attributionControl: false,
+        scrollWheelZoom: false,
+        dragging: false,
+        doubleClickZoom: false,
+      }).setView([lat, lng], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.marker([lat, lng]).addTo(map);
+      L.control.zoom({ position: 'topright' }).addTo(map);
+
+      mapInstanceRef.current = map;
+    });
+
+    return () => {
+      mounted = false;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, [lat, lng]);
+
+  return (
+    <div
+      style={{
+        background: 'linear-gradient(180deg, #fef9e7 0%, #f5ecd6 100%)',
+        border: '2px solid #6b4423',
+        borderRadius: '6px',
+        padding: '8px',
+        minWidth: '180px',
+        maxWidth: '220px',
+        boxShadow:
+          '0 4px 8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(107, 68, 35, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+        position: 'relative',
+        fontFamily: "'Courier New', monospace",
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          top: '-10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontSize: '18px',
+          filter: 'drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3))',
+          zIndex: 10,
+        }}
+      >
+        📌
+      </div>
+      <Handle type="target" position={Position.Top} style={{ background: '#6b4423', width: '8px', height: '8px' }} />
+      <div style={{ textAlign: 'center' }}>
+        {hasCoords && (
+          <div
+            ref={mapRef}
+            className="place-node-map"
+            style={{
+              width: '100%',
+              height: '100px',
+              borderRadius: '4px',
+              overflow: 'hidden',
+              background: '#e8dcc8',
+              marginBottom: '8px',
+            }}
+          />
+        )}
+        <div
+          style={{
+            fontSize: '10px',
+            fontWeight: 'bold',
+            color: '#6b4423',
+            marginBottom: '4px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+          }}
+        >
+          LOCATION
+        </div>
+        <div style={{ fontSize: '13px', fontWeight: '700', marginBottom: '4px', color: '#2c1810' }}>
+          {data.label || data.name}
+        </div>
+        {locationLine && (
+          <div style={{ fontSize: '10px', color: '#8b6f47', marginBottom: '4px', lineHeight: 1.3 }}>
+            {locationLine}
+          </div>
+        )}
+        <div style={{ fontSize: '10px', color: '#6b4423', borderTop: '1px solid #8b6f47', paddingTop: '6px', marginTop: '6px' }}>
+          {data.mention_count} {data.mention_count === 1 ? 'mention' : 'mentions'}
+        </div>
+      </div>
+      <Handle type="source" position={Position.Bottom} style={{ background: '#6b4423', width: '8px', height: '8px' }} />
+    </div>
+  );
+};
+
 // Image node component - displays image with connections
 const ImageNode = ({ data }: { data: GraphNode }) => {
   const imageUrl = data.image ? `/api/image?path=${encodeURIComponent(data.image)}` : null;
@@ -217,6 +347,7 @@ const ImageNode = ({ data }: { data: GraphNode }) => {
 const nodeTypes: NodeTypes = {
   entity: EntityNode,
   image: ImageNode,
+  place: PlaceNode,
 };
 
 export default function GraphVisualization({
@@ -244,8 +375,15 @@ export default function GraphVisualization({
     const HEIGHT = 1100;
     const CENTER_X = WIDTH / 2;
     const CENTER_Y = HEIGHT / 2;
-    const NODE_RADIUS = 95;
     const cache = positionCache.current;
+
+    const getCollisionRadius = (node: GraphNode) => {
+      if (node.type === 'IMAGE') return 65;
+      if (node.type === 'GPE') return 130;
+      return 120;
+    };
+
+    const imageIds = new Set(nodes.filter((n) => n.type === 'IMAGE').map((n) => n.id));
 
     const simNodes = nodes.map((node) => {
       const cached = cache.get(node.id);
@@ -253,6 +391,7 @@ export default function GraphVisualization({
         id: node.id,
         x: cached?.x ?? CENTER_X + (Math.random() - 0.5) * 400,
         y: cached?.y ?? CENTER_Y + (Math.random() - 0.5) * 400,
+        radius: getCollisionRadius(node),
       };
     });
 
@@ -266,13 +405,28 @@ export default function GraphVisualization({
         'link',
         forceLink(simLinks)
           .id((d) => (d as { id: string }).id)
-          .distance(280)
+          .distance((link) => {
+            const src = link.source as { id?: string };
+            const tgt = link.target as { id?: string };
+            const sourceId = src?.id ?? String(link.source);
+            const targetId = tgt?.id ?? String(link.target);
+            const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
+            return involvesImage ? 120 : 250;
+          })
+          .strength((link) => {
+            const src = link.source as { id?: string };
+            const tgt = link.target as { id?: string };
+            const sourceId = src?.id ?? String(link.source);
+            const targetId = tgt?.id ?? String(link.target);
+            const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
+            return involvesImage ? 1 : 0.6;
+          })
       )
-      .force('charge', forceManyBody().strength(-600))
+      .force('charge', forceManyBody().strength(-450))
       .force('center', forceCenter(CENTER_X, CENTER_Y))
-      .force('collision', forceCollide(NODE_RADIUS));
+      .force('collision', forceCollide<(typeof simNodes)[0]>().radius((d) => d.radius).iterations(5));
 
-    for (let i = 0; i < 250; i++) {
+    for (let i = 0; i < 400; i++) {
       simulation.tick();
     }
 
@@ -280,9 +434,11 @@ export default function GraphVisualization({
 
     const flowNodes: Node[] = nodes.map((node) => {
       const pos = cache.get(node.id)!;
+      const nodeType =
+        node.type === 'IMAGE' ? 'image' : node.type === 'GPE' ? 'place' : 'entity';
       return {
         id: node.id,
-        type: node.type === 'IMAGE' ? 'image' : 'entity',
+        type: nodeType,
         position: pos,
         data: {
           ...node,

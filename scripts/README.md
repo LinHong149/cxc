@@ -24,6 +24,11 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+```bash
+export OPENAI_API_KEY="sk-proj-..."
+
+```
+
 ## Usage
 
 ```bash

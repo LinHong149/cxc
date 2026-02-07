@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.pdf
+!sample_data/.gitkeep
+output/
+*.json
+!package*.json
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+
+.env

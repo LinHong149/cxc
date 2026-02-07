@@ -6,6 +6,79 @@ Upload documents → extract people/places/organizations → build evidence-back
 
 ---
 
+## 🛠️ Setup & Installation
+
+### Prerequisites
+- Python 3.8+
+- pip
+
+### Quick Start
+
+1. **Create and activate a virtual environment** (recommended):
+   ```bash
+   # Create virtual environment
+   python3 -m venv venv
+   
+   # Activate it
+   # On macOS/Linux:
+   source venv/bin/activate
+   # On Windows:
+   # venv\Scripts\activate
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Set up OpenAI API key** (see section below)
+
+4. **Test the PDF parser**:
+   ```bash
+   # With OpenAI (default, requires API key):
+   python scripts/parse_pdf.py sample_data/EFTA00011414.pdf -o output.json
+   
+   # Without LLM (simple extraction only):
+   python scripts/parse_pdf.py sample_data/EFTA00011414.pdf -o output.json --no-llm
+   ```
+
+### OpenAI API Setup (Required for LLM Summarization)
+
+The PDF parser uses OpenAI's API for generating summaries and extracting dates. To use this feature:
+
+1. **Get an OpenAI API key**:
+   - Sign up at https://platform.openai.com/
+   - Create an API key in your account settings
+
+2. **Set the API key as an environment variable**:
+   ```bash
+   # macOS/Linux:
+   export OPENAI_API_KEY="sk-your-key-here"
+   
+   # Windows (PowerShell):
+   $env:OPENAI_API_KEY="sk-your-key-here"
+   
+   # Or add to your ~/.zshrc or ~/.bashrc for persistence:
+   echo 'export OPENAI_API_KEY="sk-your-key-here"' >> ~/.zshrc
+   ```
+
+3. **Test the parser with OpenAI**:
+   ```bash
+   python scripts/parse_pdf.py sample_data/EFTA00011414.pdf -o output.json
+   ```
+
+   The script will automatically use OpenAI if `OPENAI_API_KEY` is set. By default, it uses `gpt-4o-mini` for cost efficiency.
+
+### Development Setup
+
+The project uses:
+- `pdfplumber` for PDF text extraction
+- `python-dateutil` for date parsing
+- `openai` for LLM-powered summarization and date extraction
+- `transformers` and `torch` (optional, for local models)
+
+---
+
 ## 🚀 Inspiration
 
 Large investigative datasets (court filings, logs, reports, leaked archives, etc.) are difficult to navigate manually.

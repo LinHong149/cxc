@@ -1,0 +1,874 @@
+{
+  "nodes": [
+    {
+      "id": "PERSON:ghislaine maxwell",
+      "name": "GHISLAINE MAXWELL",
+      "label": "GHISLAINE MAXWELL",
+      "type": "PERSON",
+      "mention_count": 18,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:jeffrey epstein",
+      "name": "Jeffrey Epstein",
+      "label": "Jeffrey Epstein",
+      "type": "PERSON",
+      "mention_count": 12,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:maxwell",
+      "name": "MAXWELL",
+      "label": "MAXWELL",
+      "type": "PERSON",
+      "mention_count": 52,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:jeffrey epstein's",
+      "name": "Jeffrey Epstein's",
+      "label": "Jeffrey Epstein's",
+      "type": "PERSON",
+      "mention_count": 3,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:epstein",
+      "name": "Epstein",
+      "label": "Epstein",
+      "type": "PERSON",
+      "mention_count": 64,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "LOC:the upper east side",
+      "name": "the Upper East Side",
+      "label": "the Upper East Side",
+      "type": "LOC",
+      "mention_count": 1,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:minor victim-1 to",
+      "name": "Minor Victim-1 to",
+      "label": "Minor Victim-1 to",
+      "type": "PERSON",
+      "mention_count": 1,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:minor victim-1 about",
+      "name": "Minor Victim-1 about",
+      "label": "Minor Victim-1 about",
+      "type": "PERSON",
+      "mention_count": 1,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "LOC:the southern district of new york",
+      "name": "the Southern District of New York",
+      "label": "the Southern District of New York",
+      "type": "LOC",
+      "mention_count": 3,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "LOC:the southern district",
+      "name": "the Southern District",
+      "label": "the Southern District",
+      "type": "LOC",
+      "mention_count": 3,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    },
+    {
+      "id": "PERSON:foreperson audrey s rauss",
+      "name": "FOREPERSON AUDREY S RAUSS",
+      "label": "FOREPERSON AUDREY S RAUSS",
+      "type": "PERSON",
+      "mention_count": 1,
+      "first_seen": null,
+      "last_seen": null,
+      "documents": [
+        "golden_doc"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "PERSON:epstein--PERSON:ghislaine maxwell",
+      "source": "PERSON:epstein",
+      "target": "PERSON:ghislaine maxwell",
+      "weight": 9,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p09",
+          "snippet": "an unsolicited massage to Minor Victim-2, during which Minor Victim-2 was topless.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p14",
+          "snippet": "New York Residence, in violation of New York Penal Law, Section 130.55.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p16",
+          "snippet": "Q\u2022 List all the people under the age of 18 that you interacted with at any of Jeffrey's properties? A.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:jeffrey epstein",
+      "source": "PERSON:epstein",
+      "target": "PERSON:jeffrey epstein",
+      "weight": 3,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:jeffrey epstein's",
+      "source": "PERSON:epstein",
+      "target": "PERSON:jeffrey epstein's",
+      "weight": 3,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:maxwell",
+      "source": "PERSON:epstein",
+      "target": "PERSON:maxwell",
+      "weight": 10,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p08",
+          "snippet": "and involved in some of this abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p09",
+          "snippet": "an unsolicited massage to Minor Victim-2, during which Minor Victim-2 was topless.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p11",
+          "snippet": "Between in or about 1994 and in or about 1997, when Minor Victim-1 was under the age of 18, MAXWELL participated in multiple group sexual encounters with Epstein and Minor Victim-1 in New York and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p16",
+          "snippet": "Q\u2022 List all the people under the age of 18 that you interacted with at any of Jeffrey's properties? A.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:ghislaine maxwell--PERSON:jeffrey epstein",
+      "source": "PERSON:ghislaine maxwell",
+      "target": "PERSON:jeffrey epstein",
+      "weight": 7,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p10",
+          "snippet": "abuse of minor victims by Jeffrey Epstein, including some of the specific events and acts of abuse detailed above.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p15",
+          "snippet": "aided and abetted the same, to wit, MAXWELL arranged for Minor victim-1 to be transported from Florida to New York, New York on multiple occasions with the intention that Minor Victim-1 would engage...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:ghislaine maxwell--PERSON:jeffrey epstein's",
+      "source": "PERSON:ghislaine maxwell",
+      "target": "PERSON:jeffrey epstein's",
+      "weight": 3,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:ghislaine maxwell--PERSON:maxwell",
+      "source": "PERSON:ghislaine maxwell",
+      "target": "PERSON:maxwell",
+      "weight": 11,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p09",
+          "snippet": "an unsolicited massage to Minor Victim-2, during which Minor Victim-2 was topless.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p15",
+          "snippet": "aided and abetted the same, to wit, MAXWELL arranged for Minor victim-1 to be transported from Florida to New York, New York on multiple occasions with the intention that Minor Victim-1 would engage...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p16",
+          "snippet": "Q\u2022 List all the people under the age of 18 that you interacted with at any of Jeffrey's properties? A.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:jeffrey epstein--PERSON:jeffrey epstein's",
+      "source": "PERSON:jeffrey epstein",
+      "target": "PERSON:jeffrey epstein's",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:jeffrey epstein--PERSON:maxwell",
+      "source": "PERSON:jeffrey epstein",
+      "target": "PERSON:maxwell",
+      "weight": 6,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p02",
+          "snippet": "Epstein's residences in different states, which MAXWELL knew and intended would result in their grooming for and subjection to sexual abuse.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p03",
+          "snippet": "Beginning in at least 1994, GHISLAINE MAXWELL, the defendant, enticed and groomed multiple minor girls to engage in sex acts with Jeffrey Epstein, through a variety of means and methods, including...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p15",
+          "snippet": "aided and abetted the same, to wit, MAXWELL arranged for Minor victim-1 to be transported from Florida to New York, New York on multiple occasions with the intention that Minor Victim-1 would engage...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:jeffrey epstein's--PERSON:maxwell",
+      "source": "PERSON:jeffrey epstein's",
+      "target": "PERSON:maxwell",
+      "weight": 3,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p01",
+          "snippet": "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK x SEALED UNITED STATES OF AMERICA INDICTMENT 20 Cr.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p04",
+          "snippet": "massage Epstein in front of a minor victim.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the upper east side--PERSON:epstein",
+      "source": "LOC:the upper east side",
+      "target": "PERSON:epstein",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the upper east side--PERSON:ghislaine maxwell",
+      "source": "LOC:the upper east side",
+      "target": "PERSON:ghislaine maxwell",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the upper east side--PERSON:jeffrey epstein's",
+      "source": "LOC:the upper east side",
+      "target": "PERSON:jeffrey epstein's",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the upper east side--PERSON:maxwell",
+      "source": "LOC:the upper east side",
+      "target": "PERSON:maxwell",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p05",
+          "snippet": "directing a victim to touch Epstein while he masturbated, and directing a victim to touch Epstein's genitals.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:minor victim-1 about",
+      "source": "PERSON:epstein",
+      "target": "PERSON:minor victim-1 about",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:minor victim-1 to",
+      "source": "PERSON:epstein",
+      "target": "PERSON:minor victim-1 to",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:ghislaine maxwell--PERSON:minor victim-1 about",
+      "source": "PERSON:ghislaine maxwell",
+      "target": "PERSON:minor victim-1 about",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:ghislaine maxwell--PERSON:minor victim-1 to",
+      "source": "PERSON:ghislaine maxwell",
+      "target": "PERSON:minor victim-1 to",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:maxwell--PERSON:minor victim-1 about",
+      "source": "PERSON:maxwell",
+      "target": "PERSON:minor victim-1 about",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:maxwell--PERSON:minor victim-1 to",
+      "source": "PERSON:maxwell",
+      "target": "PERSON:minor victim-1 to",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:minor victim-1 about--PERSON:minor victim-1 to",
+      "source": "PERSON:minor victim-1 about",
+      "target": "PERSON:minor victim-1 to",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p07",
+          "snippet": "MAXWELL's personal residence in London, England.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district of new york--PERSON:ghislaine maxwell",
+      "source": "LOC:the southern district of new york",
+      "target": "PERSON:ghislaine maxwell",
+      "weight": 2,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p10",
+          "snippet": "abuse of minor victims by Jeffrey Epstein, including some of the specific events and acts of abuse detailed above.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district of new york--PERSON:jeffrey epstein",
+      "source": "LOC:the southern district of new york",
+      "target": "PERSON:jeffrey epstein",
+      "weight": 2,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p10",
+          "snippet": "abuse of minor victims by Jeffrey Epstein, including some of the specific events and acts of abuse detailed above.",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district--LOC:the southern district of new york",
+      "source": "LOC:the southern district",
+      "target": "LOC:the southern district of new york",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district--PERSON:ghislaine maxwell",
+      "source": "LOC:the southern district",
+      "target": "PERSON:ghislaine maxwell",
+      "weight": 3,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p14",
+          "snippet": "New York Residence, in violation of New York Penal Law, Section 130.55.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district--PERSON:jeffrey epstein",
+      "source": "LOC:the southern district",
+      "target": "PERSON:jeffrey epstein",
+      "weight": 2,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district--PERSON:maxwell",
+      "source": "LOC:the southern district",
+      "target": "PERSON:maxwell",
+      "weight": 2,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        },
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p13",
+          "snippet": "wit, transportation of minors, in violation of Title 18, United States Code, Section 2423(a).",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district of new york--PERSON:maxwell",
+      "source": "LOC:the southern district of new york",
+      "target": "PERSON:maxwell",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p12",
+          "snippet": "From at least in or about 1994, up to and including in or about 1997, in the Southern District of New York and elsewhere, GHISLAINE MAXWELL, the defendant, knowingly did persuade, induce, entice, and...",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "LOC:the southern district--PERSON:epstein",
+      "source": "LOC:the southern district",
+      "target": "PERSON:epstein",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p14",
+          "snippet": "New York Residence, in violation of New York Penal Law, Section 130.55.",
+          "timestamp": null
+        }
+      ]
+    },
+    {
+      "id": "PERSON:epstein--PERSON:foreperson audrey s rauss",
+      "source": "PERSON:epstein",
+      "target": "PERSON:foreperson audrey s rauss",
+      "weight": 1,
+      "evidence": [
+        {
+          "doc_id": "golden_doc",
+          "page_id": "golden_doc#p17",
+          "snippet": "Other than yourself and the blond and brunette that you have identified as having been involved in three-way sexual activities, with whom did Mr.",
+          "timestamp": null
+        }
+      ]
+    }
+  ],
+  "timeline_range": {
+    "start": null,
+    "end": null
+  }
+}

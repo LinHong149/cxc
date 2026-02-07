@@ -1,0 +1,1126 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-02-07T15:00:00",
+  "generator": {
+    "name": "timeline-detective-output",
+    "notes": [
+      "Entities are restricted to people, places, and organizations (documents are referenced in `sources`).",
+      "This JSON is derived from a single source document (a sealed indictment) and includes extracted entities, events, and relationship claims with evidence references.",
+      "Minor victims are represented as anonymized person entities (Minor Victim-1/2/3) as named in the indictment."
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "doc_golden_0001",
+      "type": "pdf",
+      "title": "United States v. Ghislaine Maxwell — Sealed Indictment (SDNY)",
+      "court": "United States District Court, Southern District of New York",
+      "case_number": "20 Cr.",
+      "document_kind": "Indictment",
+      "pages": 18,
+      "file_name": "golden_doc.pdf",
+      "provenance": {
+        "ingested_from": "user_upload",
+        "hashes": {
+          "sha256": null
+        }
+      },
+      "page_labels": {
+        "1": "page_1",
+        "2": "page_2",
+        "3": "page_3",
+        "4": "page_4",
+        "5": "page_5",
+        "6": "page_6",
+        "7": "page_7",
+        "8": "page_8",
+        "9": "page_9",
+        "10": "page_10",
+        "11": "page_11",
+        "12": "page_12",
+        "13": "page_13",
+        "14": "page_14",
+        "15": "page_15",
+        "16": "page_16",
+        "17": "page_17",
+        "18": "page_18"
+      },
+      "extraction": {
+        "method": "text extraction (no OCR)",
+        "language": "en"
+      }
+    }
+  ],
+  "entities": [
+    {
+      "entity_id": "person_maxwell_ghislaine",
+      "type": "person",
+      "name": "Ghislaine Maxwell",
+      "aliases": [
+        "GHISLAINE MAXWELL",
+        "MAXWELL"
+      ],
+      "roles": [
+        "Defendant",
+        "Associate/manager of Jeffrey Epstein properties (as alleged)"
+      ],
+      "attributes": {
+        "relationship_to_epstein": "Personal and professional relationship; intimate relationship (1994–1997, as alleged)",
+        "employment": "Paid to manage Epstein properties (as alleged)"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 2,
+          "evidence": "Factual Background ¶3"
+        }
+      ]
+    },
+    {
+      "entity_id": "person_epstein_jeffrey",
+      "type": "person",
+      "name": "Jeffrey Epstein",
+      "aliases": [
+        "Jeffrey Epstein",
+        "Epstein",
+        "EPSTEIN"
+      ],
+      "roles": [
+        "Co-conspirator (as alleged)",
+        "Owner of multiple residences (as alleged)"
+      ],
+      "attributes": {
+        "alleged_preference": "Sexual preference for underage girls (as alleged)"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 5,
+          "evidence": "¶5"
+        }
+      ]
+    },
+    {
+      "entity_id": "person_minor_victim_1",
+      "type": "person",
+      "name": "Minor Victim-1",
+      "aliases": [
+        "Minor Victim-1"
+      ],
+      "roles": [
+        "Anonymized minor victim (as alleged)"
+      ],
+      "attributes": {
+        "age_at_first_contact": 14
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 7,
+          "evidence": "¶7(a)"
+        }
+      ]
+    },
+    {
+      "entity_id": "person_minor_victim_2",
+      "type": "person",
+      "name": "Minor Victim-2",
+      "aliases": [
+        "Minor Victim-2"
+      ],
+      "roles": [
+        "Anonymized minor victim (as alleged)"
+      ],
+      "attributes": {
+        "under_18": true
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "evidence": "¶7(b)"
+        }
+      ]
+    },
+    {
+      "entity_id": "person_minor_victim_3",
+      "type": "person",
+      "name": "Minor Victim-3",
+      "aliases": [
+        "Minor Victim-3"
+      ],
+      "roles": [
+        "Anonymized minor victim (as alleged)"
+      ],
+      "attributes": {
+        "under_18": true
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 9,
+          "evidence": "¶7(c)"
+        }
+      ]
+    },
+    {
+      "entity_id": "person_audrey_s_ross",
+      "type": "person",
+      "name": "Audrey S. Strauss",
+      "aliases": [
+        "AUDREY S RAUSS",
+        "AUDREY STRAUSS"
+      ],
+      "roles": [
+        "Acting United States Attorney (as shown on the indictment form)"
+      ],
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 17,
+          "evidence": "Signature block"
+        }
+      ]
+    },
+    {
+      "entity_id": "org_usa",
+      "type": "organization",
+      "name": "United States of America",
+      "aliases": [
+        "UNITED STATES OF AMERICA"
+      ],
+      "roles": [
+        "Plaintiff"
+      ],
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "evidence": "Caption"
+        }
+      ]
+    },
+    {
+      "entity_id": "org_usdc_sdny",
+      "type": "organization",
+      "name": "United States District Court, Southern District of New York",
+      "aliases": [
+        "UNITED STATES DISTRICT COURT SOUTHERN DISTRICT OF NEW YORK",
+        "SDNY"
+      ],
+      "roles": [
+        "Court"
+      ],
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "evidence": "Header"
+        }
+      ]
+    },
+    {
+      "entity_id": "org_grand_jury",
+      "type": "organization",
+      "name": "Grand Jury",
+      "aliases": [
+        "The Grand Jury"
+      ],
+      "roles": [
+        "Charging body (as shown)"
+      ],
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "evidence": "Charging language"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_sdny",
+      "type": "place",
+      "name": "Southern District of New York",
+      "aliases": [
+        "Southern District of New York"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "NY"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 10,
+          "evidence": "Jurisdiction language ¶9"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_ny_residence",
+      "type": "place",
+      "name": "Epstein New York Residence (Upper East Side, Manhattan)",
+      "aliases": [
+        "New York Residence"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "NY",
+        "city": "New York",
+        "neighborhood": "Upper East Side, Manhattan"
+      },
+      "attributes": {
+        "description": "Multi-story private residence on the Upper East Side of Manhattan, New York (as alleged)"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 5,
+          "evidence": "¶6(a)"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_palm_beach_residence",
+      "type": "place",
+      "name": "Epstein Palm Beach Residence",
+      "aliases": [
+        "Palm Beach Residence"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "FL",
+        "city": "Palm Beach"
+      },
+      "attributes": {
+        "description": "Estate in Palm Beach, Florida (as alleged)"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 6,
+          "evidence": "¶6(b)"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_new_mexico_residence",
+      "type": "place",
+      "name": "Epstein New Mexico Residence (ranch)",
+      "aliases": [
+        "New Mexico Residence"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "NM",
+        "city": "Santa Fe (vicinity)"
+      },
+      "attributes": {
+        "description": "Ranch in Santa Fe, New Mexico (as alleged)"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 6,
+          "evidence": "¶6(c)"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_london_maxwell_residence",
+      "type": "place",
+      "name": "Maxwell personal residence (London, England)",
+      "aliases": [
+        "MAXWELL's personal residence in London, England",
+        "London residence"
+      ],
+      "geo": {
+        "country": "UK",
+        "admin_area": "England",
+        "city": "London"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 7,
+          "evidence": "¶6(d)"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_florida",
+      "type": "place",
+      "name": "Florida",
+      "aliases": [
+        "Florida"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "FL"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "evidence": "¶7(a) travel to Florida; ¶11(b) Florida→NY"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_new_york_ny",
+      "type": "place",
+      "name": "New York, New York",
+      "aliases": [
+        "New York, New York",
+        "New York"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "NY",
+        "city": "New York"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 12,
+          "evidence": "Count Two ¶13"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_new_mexico",
+      "type": "place",
+      "name": "New Mexico",
+      "aliases": [
+        "New Mexico"
+      ],
+      "geo": {
+        "country": "US",
+        "admin_area": "NM"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "evidence": "¶7(b)"
+        }
+      ]
+    },
+    {
+      "entity_id": "place_london_england",
+      "type": "place",
+      "name": "London, England",
+      "aliases": [
+        "London, England",
+        "London"
+      ],
+      "geo": {
+        "country": "UK",
+        "admin_area": "England",
+        "city": "London"
+      },
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 9,
+          "evidence": "¶7(c)"
+        }
+      ]
+    }
+  ],
+  "events": [
+    {
+      "event_id": "event_relationship_1994_1997",
+      "type": "relationship_context",
+      "title": "Maxwell relationship and property management for Epstein (as alleged)",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "participants": [
+        "person_maxwell_ghislaine",
+        "person_epstein_jeffrey"
+      ],
+      "locations": [],
+      "summary": "During 1994–1997, Maxwell was alleged to have had an intimate relationship with Epstein and to have been paid to manage his properties.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 2,
+          "evidence": "¶3"
+        }
+      ]
+    },
+    {
+      "event_id": "event_grooming_scheme_1994_1997",
+      "type": "pattern_of_conduct",
+      "title": "Recruiting/grooming and abuse facilitation scheme (as alleged)",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "participants": [
+        "person_maxwell_ghislaine",
+        "person_epstein_jeffrey",
+        "person_minor_victim_1",
+        "person_minor_victim_2",
+        "person_minor_victim_3"
+      ],
+      "locations": [
+        "place_ny_residence",
+        "place_palm_beach_residence",
+        "place_new_mexico_residence",
+        "place_london_maxwell_residence"
+      ],
+      "summary": "The indictment alleges Maxwell assisted Epstein in recruiting, grooming, and facilitating sexual abuse of minor girls, including arranging travel and normalizing sexual conduct through staged interactions and massages.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "evidence": "Overview ¶1–2"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 3,
+          "evidence": "Methods ¶4"
+        }
+      ]
+    },
+    {
+      "event_id": "event_mv1_contact_1994_1997",
+      "type": "victim_interactions",
+      "title": "Interactions with Minor Victim-1 including travel and abuse context (as alleged)",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "participants": [
+        "person_maxwell_ghislaine",
+        "person_epstein_jeffrey",
+        "person_minor_victim_1"
+      ],
+      "locations": [
+        "place_ny_residence",
+        "place_palm_beach_residence",
+        "place_new_york_ny",
+        "place_florida"
+      ],
+      "summary": "Alleged befriending, normalization, group sexualized massages, and encouragement to travel to Epstein residences in New York and Florida; abuse alleged in both locations.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 7,
+          "evidence": "¶7(a)"
+        }
+      ]
+    },
+    {
+      "event_id": "event_mv2_nm_trip_1996",
+      "type": "victim_trip",
+      "title": "Minor Victim-2 trip to New Mexico and grooming activities (as alleged)",
+      "time": {
+        "start": "1996-01-01",
+        "end": "1996-12-31",
+        "time_precision": "approx"
+      },
+      "participants": [
+        "person_maxwell_ghislaine",
+        "person_epstein_jeffrey",
+        "person_minor_victim_2"
+      ],
+      "locations": [
+        "place_new_mexico_residence",
+        "place_new_mexico"
+      ],
+      "summary": "Minor Victim-2 allegedly flew from out of state to New Mexico at Epstein's invitation; Maxwell allegedly engaged in grooming behaviors including an unsolicited massage and encouraging massages of Epstein.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "evidence": "¶7(b)"
+        }
+      ]
+    },
+    {
+      "event_id": "event_mv3_london_1994_1995",
+      "type": "victim_interactions",
+      "title": "Minor Victim-3 grooming in London and arranged interactions (as alleged)",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1995-12-31",
+        "time_precision": "approx"
+      },
+      "participants": [
+        "person_maxwell_ghislaine",
+        "person_epstein_jeffrey",
+        "person_minor_victim_3"
+      ],
+      "locations": [
+        "place_london_england",
+        "place_london_maxwell_residence"
+      ],
+      "summary": "Maxwell allegedly groomed/befriended Minor Victim-3 in London and arranged interactions with Epstein, encouraging massages with awareness of sexual abuse context.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 9,
+          "evidence": "¶7(c)"
+        }
+      ]
+    },
+    {
+      "event_id": "event_deposition_2016_04_22",
+      "type": "legal_proceeding",
+      "title": "Deposition testimony (April 22, 2016) — alleged false declarations",
+      "time": {
+        "start": "2016-04-22",
+        "end": "2016-04-22",
+        "time_precision": "day"
+      },
+      "participants": [
+        "person_maxwell_ghislaine"
+      ],
+      "locations": [
+        "place_sdny"
+      ],
+      "summary": "The indictment alleges Maxwell made false material declarations under oath during a deposition connected to civil litigation (15 Civ. 7344).",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 15,
+          "evidence": "Count Five ¶21"
+        }
+      ]
+    },
+    {
+      "event_id": "event_deposition_2016_07_22",
+      "type": "legal_proceeding",
+      "title": "Deposition testimony (July 22, 2016) — alleged false declarations",
+      "time": {
+        "start": "2016-07-22",
+        "end": "2016-07-22",
+        "time_precision": "day"
+      },
+      "participants": [
+        "person_maxwell_ghislaine"
+      ],
+      "locations": [
+        "place_sdny"
+      ],
+      "summary": "The indictment alleges Maxwell made additional false material declarations under oath on July 22, 2016.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 16,
+          "evidence": "Count Six ¶23"
+        }
+      ]
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "claim_001_assisted_epstein_1994_1997",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "assisted_and_facilitated_abuse",
+      "object": "person_epstein_jeffrey",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "locations": [
+        "place_ny_residence",
+        "place_palm_beach_residence",
+        "place_new_mexico_residence",
+        "place_london_maxwell_residence"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.92
+      },
+      "summary": "Maxwell allegedly assisted, facilitated, and contributed to Epstein's abuse of minor girls by recruiting and grooming victims known to be under 18.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "anchor": "Overview ¶1"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 3,
+          "anchor": "Methods ¶4"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_002_enticed_travel_across_states",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "enticed_minor_to_travel",
+      "object": "person_minor_victim_1",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "locations": [
+        "place_florida",
+        "place_new_york_ny",
+        "place_ny_residence",
+        "place_palm_beach_residence"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.9
+      },
+      "summary": "Maxwell allegedly persuaded/induced Minor Victim-1 to travel from Florida to New York on multiple occasions with intent of sexual activity with Epstein.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 12,
+          "anchor": "Count Two ¶13"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "anchor": "¶7(a) travel encouragement"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_003_group_sexualized_massages_mv1",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "participated_in_group_sexualized_massages",
+      "object": "person_minor_victim_1",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "locations": [
+        "place_ny_residence",
+        "place_palm_beach_residence"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.88
+      },
+      "summary": "Maxwell allegedly involved Minor Victim-1 in group sexualized massages of Epstein and participated in some abuse incidents.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "anchor": "¶7(a) group sexualized massages"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 11,
+          "anchor": "Overt Acts ¶11(a)"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_004_mv2_unsolicited_massage_1996",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "gave_unsolicited_massage",
+      "object": "person_minor_victim_2",
+      "time": {
+        "start": "1996-01-01",
+        "end": "1996-12-31",
+        "time_precision": "approx"
+      },
+      "locations": [
+        "place_new_mexico_residence",
+        "place_new_mexico"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.86
+      },
+      "summary": "Maxwell allegedly provided Minor Victim-2 an unsolicited massage in New Mexico while Minor Victim-2 was topless, and encouraged Minor Victim-2 to massage Epstein.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 8,
+          "anchor": "¶7(b)"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 11,
+          "anchor": "Overt Acts ¶11(c)"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_005_mv3_london_massages_1994_1995",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "encouraged_massages_with_awareness_of_abuse",
+      "object": "person_minor_victim_3",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1995-12-31",
+        "time_precision": "approx"
+      },
+      "locations": [
+        "place_london_england",
+        "place_london_maxwell_residence"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.85
+      },
+      "summary": "Maxwell allegedly encouraged Minor Victim-3 to provide massages to Epstein in London with awareness that Epstein would sexually abuse Minor Victim-3 during those massages.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 9,
+          "anchor": "¶7(c)"
+        },
+        {
+          "source_id": "doc_golden_0001",
+          "page": 11,
+          "anchor": "Overt Acts ¶11(d)"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_006_perjury_apr_22_2016",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "made_false_material_declarations_under_oath",
+      "object": "org_usdc_sdny",
+      "time": {
+        "start": "2016-04-22",
+        "end": "2016-04-22",
+        "time_precision": "day"
+      },
+      "locations": [
+        "place_sdny"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.8
+      },
+      "summary": "The indictment alleges Maxwell falsely denied knowledge of a scheme to recruit underage girls and denied interacting with under-18 persons (beyond the named plaintiff) at Epstein properties.",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 15,
+          "anchor": "Count Five ¶21"
+        }
+      ]
+    },
+    {
+      "claim_id": "claim_007_perjury_jul_22_2016",
+      "type": "allegation",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "made_false_material_declarations_under_oath",
+      "object": "org_usdc_sdny",
+      "time": {
+        "start": "2016-07-22",
+        "end": "2016-07-22",
+        "time_precision": "day"
+      },
+      "locations": [
+        "place_sdny"
+      ],
+      "confidence": {
+        "label": "documented_in_indictment",
+        "score": 0.8
+      },
+      "summary": "The indictment alleges Maxwell falsely denied awareness of sex toys, denied that Epstein had sexual activities with others, and denied giving massages (including to Minor Victim-2).",
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 16,
+          "anchor": "Count Six ¶23"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationship_id": "rel_001_maxwell_associate_epstein",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "close_associate_of",
+      "object": "person_epstein_jeffrey",
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 2,
+          "anchor": "¶3"
+        }
+      ]
+    },
+    {
+      "relationship_id": "rel_002_epstein_owned_ny_residence",
+      "subject": "person_epstein_jeffrey",
+      "predicate": "owned",
+      "object": "place_ny_residence",
+      "time": {
+        "start": null,
+        "end": null,
+        "time_precision": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 5,
+          "anchor": "¶6(a)"
+        }
+      ]
+    },
+    {
+      "relationship_id": "rel_003_epstein_owned_palm_beach_residence",
+      "subject": "person_epstein_jeffrey",
+      "predicate": "owned",
+      "object": "place_palm_beach_residence",
+      "time": {
+        "start": null,
+        "end": null,
+        "time_precision": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 6,
+          "anchor": "¶6(b)"
+        }
+      ]
+    },
+    {
+      "relationship_id": "rel_004_epstein_owned_new_mexico_residence",
+      "subject": "person_epstein_jeffrey",
+      "predicate": "owned",
+      "object": "place_new_mexico_residence",
+      "time": {
+        "start": null,
+        "end": null,
+        "time_precision": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 6,
+          "anchor": "¶6(c)"
+        }
+      ]
+    },
+    {
+      "relationship_id": "rel_005_maxwell_resided_london",
+      "subject": "person_maxwell_ghislaine",
+      "predicate": "resided_at",
+      "object": "place_london_maxwell_residence",
+      "time": {
+        "start": null,
+        "end": null,
+        "time_precision": "unknown"
+      },
+      "evidence": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 7,
+          "anchor": "¶6(d)"
+        }
+      ]
+    }
+  ],
+  "charges": [
+    {
+      "charge_id": "count_1",
+      "count_label": "COUNT ONE",
+      "title": "Conspiracy to Entice Minors to Travel to Engage in Illegal Sex Acts",
+      "statutes": [
+        "18 U.S.C. § 371",
+        "18 U.S.C. § 2422 (object offense described)"
+      ],
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "summary": "Alleged conspiracy to persuade/induce/entice/coerce minors to travel in interstate and foreign commerce for illegal sexual activity.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 1,
+          "evidence": "Count One heading; ¶9–11"
+        }
+      ]
+    },
+    {
+      "charge_id": "count_2",
+      "count_label": "COUNT TWO",
+      "title": "Enticement of a Minor to Travel to Engage in Illegal Sex Acts",
+      "statutes": [
+        "18 U.S.C. § 2422",
+        "18 U.S.C. § 2"
+      ],
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "summary": "Alleged enticement of Minor Victim-1 to travel from Florida to New York on multiple occasions for illegal sexual activity.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 12,
+          "evidence": "Count Two ¶13"
+        }
+      ]
+    },
+    {
+      "charge_id": "count_3",
+      "count_label": "COUNT THREE",
+      "title": "Conspiracy to Transport Minors with Intent to Engage in Criminal Sexual Activity",
+      "statutes": [
+        "18 U.S.C. § 371",
+        "18 U.S.C. § 2423(a) (object offense described)"
+      ],
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "summary": "Alleged conspiracy to transport minors in interstate and foreign commerce with intent to engage in criminal sexual activity.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 12,
+          "evidence": "Count Three ¶15–17"
+        }
+      ]
+    },
+    {
+      "charge_id": "count_4",
+      "count_label": "COUNT FOUR",
+      "title": "Transportation of a Minor with Intent to Engage in Criminal Sexual Activity",
+      "statutes": [
+        "18 U.S.C. § 2423(a)",
+        "18 U.S.C. § 2"
+      ],
+      "time": {
+        "start": "1994-01-01",
+        "end": "1997-12-31",
+        "time_precision": "approx"
+      },
+      "summary": "Alleged transportation arrangement for Minor Victim-1 from Florida to New York for illegal sexual activity.",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 14,
+          "evidence": "Count Four ¶19"
+        }
+      ]
+    },
+    {
+      "charge_id": "count_5",
+      "count_label": "COUNT FIVE",
+      "title": "Perjury",
+      "statutes": [
+        "18 U.S.C. § 1623"
+      ],
+      "time": {
+        "start": "2016-04-22",
+        "end": "2016-04-22",
+        "time_precision": "day"
+      },
+      "summary": "Alleged perjurious statements during an April 22, 2016 deposition (15 Civ. 7344).",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 15,
+          "evidence": "Count Five ¶21"
+        }
+      ]
+    },
+    {
+      "charge_id": "count_6",
+      "count_label": "COUNT SIX",
+      "title": "Perjury",
+      "statutes": [
+        "18 U.S.C. § 1623"
+      ],
+      "time": {
+        "start": "2016-07-22",
+        "end": "2016-07-22",
+        "time_precision": "day"
+      },
+      "summary": "Alleged perjurious statements during a July 22, 2016 deposition (15 Civ. 7344).",
+      "source_refs": [
+        {
+          "source_id": "doc_golden_0001",
+          "page": 16,
+          "evidence": "Count Six ¶23"
+        }
+      ]
+    }
+  ],
+  "timeline_index": [
+    {
+      "date": "1994-01-01",
+      "label": "Start of charged conduct window (approx)",
+      "refs": [
+        "event_grooming_scheme_1994_1997"
+      ]
+    },
+    {
+      "date": "1995-12-31",
+      "label": "End of MV-3 London grooming window (approx)",
+      "refs": [
+        "event_mv3_london_1994_1995"
+      ]
+    },
+    {
+      "date": "1996-01-01",
+      "label": "Key year for travel/contacts (approx)",
+      "refs": [
+        "event_mv2_nm_trip_1996"
+      ]
+    },
+    {
+      "date": "1997-12-31",
+      "label": "End of charged conduct window (approx)",
+      "refs": [
+        "event_grooming_scheme_1994_1997"
+      ]
+    },
+    {
+      "date": "2016-04-22",
+      "label": "Deposition (alleged perjury)",
+      "refs": [
+        "event_deposition_2016_04_22"
+      ]
+    },
+    {
+      "date": "2016-07-22",
+      "label": "Deposition (alleged perjury)",
+      "refs": [
+        "event_deposition_2016_07_22"
+      ]
+    }
+  ],
+  "integrity": {
+    "warnings": [
+      "This output reflects allegations in an indictment, not adjudicated findings.",
+      "Dates like 1994–1997 are approximate as written in the document ('in or about')."
+    ],
+    "validation": {
+      "entities_unique": true,
+      "references_resolved": true
+    }
+  }
+}

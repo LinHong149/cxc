@@ -2,21 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
 
-interface PageData {
-  doc_id: string;
-  page_id: string;
-  text: string;
-  page_number: number;
-  date?: string;
-  document_timestamp?: string;
-  one_sentence_summary?: string;
-  paragraph_summary?: string;
-}
-
-interface Entity {
+// Frontend-expected types
+interface GraphNode {
   id: string;
   name: string;
-  label?: string; // Alias for name for compatibility
+  label?: string;
   type: string;
   mention_count: number;
   first_seen?: string;
@@ -24,7 +14,7 @@ interface Entity {
   documents: string[];
 }
 
-interface Edge {
+interface GraphEdge {
   id: string;
   source: string;
   target: string;
@@ -37,116 +27,212 @@ interface Edge {
   }>;
 }
 
-// Simple NER extraction (can be enhanced with actual spaCy integration)
-function extractEntities(text: string): Array<{ text: string; label: string }> {
-  // This is a placeholder - in production, you'd use spaCy or another NER tool
-  // For now, we'll do basic pattern matching
-  const entities: Array<{ text: string; label: string }> = [];
-  const seen = new Set<string>();
-  
-  // Simple patterns (this is very basic - real implementation would use spaCy)
-  // Person pattern: Capitalized first name + capitalized last name
-  // More permissive pattern to catch more names
-  const personPattern = /\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b)/g;
-  
-  // Extract potential entities (very simplified)
-  let match;
-  while ((match = personPattern.exec(text)) !== null) {
-    const entityText = match[1].trim();
-    // Filter out common false positives and ensure it looks like a name
-    if (
-      entityText.length > 4 &&
-      entityText.split(' ').length >= 2 &&
-      entityText.split(' ').length <= 4 &&
-      !entityText.match(/^(The|A|An|This|That|These|Those|From|To|Sent|Date|Subject|RE|Fwd|Phone|Fax|Assistant|Attorney|U\.S\.|USA|FL|CA|NY)\s/i) &&
-      !entityText.match(/^\d/) &&
-      !seen.has(entityText.toLowerCase())
-    ) {
-      entities.push({ text: entityText, label: 'PERSON' });
-      seen.add(entityText.toLowerCase());
-    }
-  }
-  
-  return entities;
+// New output.json schema types
+interface OutputEntity {
+  entity_id: string;
+  type: string;
+  name: string;
+  aliases?: string[];
+  source_refs?: Array<{ source_id: string; page: number; evidence: string }>;
 }
 
-function buildGraph(pages: PageData[]): { nodes: Entity[]; edges: Edge[] } {
-  const entityMap = new Map<string, Entity>();
-  const edgeMap = new Map<string, Edge>();
-  const sentences = new Map<string, Array<{ entities: string[]; text: string; page: PageData }>>();
+interface OutputClaim {
+  claim_id: string;
+  subject: string;
+  predicate: string;
+  object: string;
+  time?: { start?: string; end?: string };
+  summary?: string;
+  evidence?: Array<{ source_id: string; page: number; anchor?: string }>;
+}
 
-  // Process each page
-  for (const page of pages) {
-    const pageEntities = extractEntities(page.text);
-    const entityIds = new Set<string>();
+interface OutputRelationship {
+  relationship_id: string;
+  subject: string;
+  predicate: string;
+  object: string;
+  time?: { start?: string; end?: string };
+  evidence?: Array<{ source_id: string; page: number; anchor?: string }>;
+}
 
-    for (const entity of pageEntities) {
-      const entityId = `${entity.label}:${entity.text.toLowerCase()}`;
-      entityIds.add(entityId);
+interface OutputEvent {
+  event_id: string;
+  time?: { start?: string; end?: string };
+  participants?: string[];
+  source_refs?: Array<{ source_id: string; page: number; evidence?: string }>;
+}
 
-      if (!entityMap.has(entityId)) {
-        entityMap.set(entityId, {
-          id: entityId,
-          name: entity.text,
-          label: entity.text, // Alias for compatibility
-          type: entity.label,
-          mention_count: 0,
-          documents: [],
-        });
-      }
+interface OutputSource {
+  source_id: string;
+  title?: string;
+  file_name?: string;
+  page_labels?: Record<string, string>;
+}
 
-      const entityData = entityMap.get(entityId)!;
-      entityData.mention_count++;
-      if (!entityData.documents.includes(page.doc_id)) {
-        entityData.documents.push(page.doc_id);
-      }
-      if (!entityData.first_seen || (page.date && page.date < entityData.first_seen)) {
-        entityData.first_seen = page.date || page.document_timestamp;
-      }
-      if (!entityData.last_seen || (page.date && page.date > entityData.last_seen)) {
-        entityData.last_seen = page.date || page.document_timestamp;
-      }
+interface OutputSchema {
+  schema_version?: string;
+  sources?: OutputSource[];
+  entities?: OutputEntity[];
+  claims?: OutputClaim[];
+  relationships?: OutputRelationship[];
+  events?: OutputEvent[];
+}
+
+function toPageId(sourceId: string, page: number): string {
+  return `${sourceId}#p${String(page).padStart(2, '0')}`;
+}
+
+function toGraphType(entityType: string): string {
+  const t = entityType?.toLowerCase() || '';
+  if (t === 'person') return 'PERSON';
+  if (t === 'organization' || t === 'org') return 'ORG';
+  if (t === 'place' || t === 'location' || t === 'loc') return 'GPE';
+  return entityType || 'PERSON';
+}
+
+function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, dateEnd: string | null): {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  timelineStart: string | null;
+  timelineEnd: string | null;
+} {
+  const entityMap = new Map<string, GraphNode>();
+  const edgeMap = new Map<string, GraphEdge>();
+
+  const inDateRange = (start?: string, end?: string) => {
+    if (!dateStart && !dateEnd) return true;
+    const rangeStart = start || end;
+    const rangeEnd = end || start;
+    if (!rangeStart && !rangeEnd) return true;
+    if (dateStart && rangeEnd && rangeEnd < dateStart) return false;
+    if (dateEnd && rangeStart && rangeStart > dateEnd) return false;
+    return true;
+  };
+
+  // Build nodes from entities
+  for (const e of data.entities || []) {
+    entityMap.set(e.entity_id, {
+      id: e.entity_id,
+      name: e.name,
+      label: e.name,
+      type: toGraphType(e.type),
+      mention_count: (e.source_refs?.length ?? 0) + (e.aliases?.length ?? 0),
+      first_seen: undefined,
+      last_seen: undefined,
+      documents: [...new Set((e.source_refs || []).map((r) => r.source_id))],
+    });
+  }
+
+  const edgeKey = (a: string, b: string) => {
+    return a < b ? `${a}--${b}` : `${b}--${a}`;
+  };
+
+  const addEvidenceToEdge = (
+    source: string,
+    target: string,
+    evidence: Array<{ source_id: string; page: number; anchor?: string; evidence?: string }>,
+    timeStart?: string,
+    summary?: string
+  ) => {
+    const key = edgeKey(source, target);
+    const [s, t] = source < target ? [source, target] : [target, source];
+    const refined = evidence.map((ev) => ({
+      doc_id: ev.source_id,
+      page_id: toPageId(ev.source_id, ev.page),
+      snippet: ev.anchor || ev.evidence || summary || '',
+      timestamp: timeStart,
+    }));
+
+    if (edgeMap.has(key)) {
+      const existing = edgeMap.get(key)!;
+      existing.weight += 1;
+      existing.evidence.push(...refined);
+    } else {
+      edgeMap.set(key, {
+        id: key,
+        source: s,
+        target: t,
+        weight: 1,
+        evidence: refined,
+      });
     }
+  };
 
-    // Build co-occurrence edges (entities in same page)
-    const entityArray = Array.from(entityIds);
-    for (let i = 0; i < entityArray.length; i++) {
-      for (let j = i + 1; j < entityArray.length; j++) {
-        const edgeId = `${entityArray[i]}--${entityArray[j]}`;
-        const reverseEdgeId = `${entityArray[j]}--${entityArray[i]}`;
-        const existingEdgeId = edgeMap.has(edgeId) ? edgeId : reverseEdgeId;
+  const updateNodeDates = (entityId: string, start?: string, end?: string) => {
+    const node = entityMap.get(entityId);
+    if (!node) return;
+    if (start && (!node.first_seen || start < node.first_seen)) node.first_seen = start;
+    if (end && (!node.last_seen || end > node.last_seen)) node.last_seen = end;
+  };
 
-        if (!edgeMap.has(edgeId) && !edgeMap.has(reverseEdgeId)) {
-          edgeMap.set(edgeId, {
-            id: edgeId,
-            source: entityArray[i],
-            target: entityArray[j],
-            weight: 1,
-            evidence: [{
-              doc_id: page.doc_id,
-              page_id: page.page_id,
-              snippet: page.one_sentence_summary || page.text.substring(0, 200),
-              timestamp: page.date || page.document_timestamp,
-            }],
-          });
-        } else {
-          const edge = edgeMap.get(existingEdgeId)!;
-          edge.weight++;
-          edge.evidence.push({
-            doc_id: page.doc_id,
-            page_id: page.page_id,
-            snippet: page.one_sentence_summary || page.text.substring(0, 200),
-            timestamp: page.date || page.document_timestamp,
-          });
-        }
-      }
+  const allDates: string[] = [];
+
+  // Process claims
+  for (const c of data.claims || []) {
+    const start = c.time?.start;
+    const end = c.time?.end;
+    if (start) allDates.push(start);
+    if (end) allDates.push(end);
+    if (!inDateRange(start, end)) continue;
+
+    if (!entityMap.has(c.subject) || !entityMap.has(c.object)) continue;
+
+    updateNodeDates(c.subject, start, end);
+    updateNodeDates(c.object, start, end);
+
+    const ev = (c.evidence || []).map((e) => ({
+      ...e,
+      anchor: e.anchor ?? c.summary,
+    }));
+    addEvidenceToEdge(c.subject, c.object, ev, start, c.summary);
+  }
+
+  // Process relationships
+  for (const r of data.relationships || []) {
+    const start = r.time?.start ?? undefined;
+    const end = r.time?.end ?? undefined;
+    if (start) allDates.push(start);
+    if (end) allDates.push(end);
+    if (!inDateRange(start, end)) continue;
+
+    if (!entityMap.has(r.subject) || !entityMap.has(r.object)) continue;
+
+    updateNodeDates(r.subject, start, end);
+    updateNodeDates(r.object, start, end);
+
+    const ev = (r.evidence || []).map((e) => ({
+      source_id: e.source_id,
+      page: e.page,
+      anchor: e.anchor,
+    }));
+    addEvidenceToEdge(r.subject, r.object, ev, start);
+  }
+
+  // Fallback: entity first_seen/last_seen from events
+  for (const ev of data.events || []) {
+    const start = ev.time?.start;
+    const end = ev.time?.end;
+    if (start) allDates.push(start);
+    if (end) allDates.push(end);
+    for (const p of ev.participants || []) {
+      updateNodeDates(p, start, end);
     }
   }
 
-  return {
-    nodes: Array.from(entityMap.values()),
-    edges: Array.from(edgeMap.values()),
-  };
+  const timelineStart =
+    allDates.length > 0 ? allDates.reduce((a, b) => (a < b ? a : b)) : null;
+  const timelineEnd =
+    allDates.length > 0 ? allDates.reduce((a, b) => (a > b ? a : b)) : null;
+
+  const edges = Array.from(edgeMap.values());
+  const connectedIds = new Set<string>();
+  for (const e of edges) {
+    connectedIds.add(e.source);
+    connectedIds.add(e.target);
+  }
+  const nodes = Array.from(entityMap.values()).filter((n) => connectedIds.has(n.id));
+
+  return { nodes, edges, timelineStart, timelineEnd };
 }
 
 export async function GET(request: NextRequest) {
@@ -155,76 +241,66 @@ export async function GET(request: NextRequest) {
     const dateStart = searchParams.get('date_start');
     const dateEnd = searchParams.get('date_end');
 
-    // Check if we're in Vercel environment
     const isVercel = process.env.VERCEL === '1';
-    
-    // Read output.json
-    // On Vercel, we can't access files outside the project
-    // For now, try to read from project root, but this won't work on Vercel
-    // In production, you'd want to use a database or storage service
-    let outputPath: string;
-    
+
     if (isVercel) {
-      // On Vercel, try to read from a public/data directory or use environment variable
-      // For now, return a helpful error message
       return NextResponse.json(
-        { 
+        {
           error: 'Graph data is not available on Vercel. The output.json file is not accessible in serverless environment.',
-          suggestion: 'Consider using a database (PostgreSQL, MongoDB) or storage service (S3, Vercel Blob) to store parsed data.'
+          suggestion:
+            'Consider using a database (PostgreSQL, MongoDB) or storage service (S3, Vercel Blob) to store parsed data.',
         },
         { status: 404 }
       );
     }
-    
-    // Local execution
+
     const projectRoot = path.resolve(process.cwd(), '..');
-    outputPath = path.join(projectRoot, 'output.json');
-    
-    let pages: PageData[];
-    
+    const outputPath = path.join(projectRoot, 'output.json');
+
+    let data: OutputSchema;
     try {
-      const data = await fs.readFile(outputPath, 'utf-8');
-      pages = JSON.parse(data);
-    } catch (error) {
+      const raw = await fs.readFile(outputPath, 'utf-8');
+      data = JSON.parse(raw);
+    } catch {
       return NextResponse.json(
         { error: 'No parsed data found. Please upload and parse a PDF first.' },
         { status: 404 }
       );
     }
 
-    // Filter by date range if provided
-    if (dateStart || dateEnd) {
-      pages = pages.filter((page) => {
-        const pageDate = page.date || page.document_timestamp;
-        if (!pageDate) return false;
-        if (dateStart && pageDate < dateStart) return false;
-        if (dateEnd && pageDate > dateEnd) return false;
-        return true;
-      });
+    if (!data.entities || !Array.isArray(data.entities)) {
+      return NextResponse.json(
+        { error: 'Invalid output.json schema: expected entities array.' },
+        { status: 400 }
+      );
     }
 
-    // Build graph
-    const graph = buildGraph(pages);
+    const { nodes, edges, timelineStart, timelineEnd } = buildGraphFromOutput(
+      data,
+      dateStart,
+      dateEnd
+    );
+
+    const sources = (data.sources || []).map((s) => ({
+      source_id: s.source_id,
+      title: s.title || s.file_name || s.source_id,
+      file_name: s.file_name,
+      page_labels: s.page_labels,
+    }));
 
     return NextResponse.json({
-      nodes: graph.nodes,
-      edges: graph.edges,
+      nodes,
+      edges,
+      sources,
       timeline_range: {
-        start: graph.nodes.reduce((min, node) => 
-          !min || (node.first_seen && node.first_seen < min) ? node.first_seen : min, 
-          undefined as string | undefined
-        ),
-        end: graph.nodes.reduce((max, node) => 
-          !max || (node.last_seen && node.last_seen > max) ? node.last_seen : max, 
-          undefined as string | undefined
-        ),
+        start: timelineStart ?? null,
+        end: timelineEnd ?? null,
       },
       filter_applied: {
         date_start: dateStart || null,
         date_end: dateEnd || null,
       },
     });
-
   } catch (error: any) {
     console.error('Error building graph:', error);
     return NextResponse.json(

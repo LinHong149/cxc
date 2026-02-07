@@ -25,7 +25,6 @@ Thumbs.db
 !sample_data/*.pdf
 !sample_data/.gitkeep
 output/
-*.json
 !package*.json
 
 # Database

@@ -10,13 +10,21 @@ interface Evidence {
   timestamp?: string;
 }
 
+interface Source {
+  source_id: string;
+  title?: string;
+  file_name?: string;
+  page_labels?: Record<string, string>;
+}
+
 interface EvidencePanelProps {
   title: string;
   evidence: Evidence[];
+  sources?: Source[];
   onClose: () => void;
 }
 
-export default function EvidencePanel({ title, evidence, onClose }: EvidencePanelProps) {
+export default function EvidencePanel({ title, evidence, sources, onClose }: EvidencePanelProps) {
   const formatDate = (dateStr: string | undefined) => {
     if (!dateStr) return 'No date';
     try {
@@ -24,6 +32,22 @@ export default function EvidencePanel({ title, evidence, onClose }: EvidencePane
     } catch {
       return dateStr;
     }
+  };
+
+  const getSourceTitle = (docId: string) => {
+    const src = sources?.find((s) => s.source_id === docId);
+    return src?.title || src?.file_name || docId;
+  };
+
+  const getPageLabel = (docId: string, pageNum: string) => {
+    const src = sources?.find((s) => s.source_id === docId);
+    const num = parseInt(pageNum, 10);
+    const label = src?.page_labels?.[pageNum] ?? src?.page_labels?.[String(num)];
+    return label ?? `Page ${isNaN(num) ? pageNum : num}`;
+  };
+
+  const getPageNum = (pageId: string) => {
+    return pageId.includes('#p') ? pageId.split('#p')[1] : pageId;
   };
 
   return (
@@ -117,11 +141,15 @@ export default function EvidencePanel({ title, evidence, onClose }: EvidencePane
                     paddingBottom: '6px',
                   }}
                 >
-                  📄 {item.doc_id} • Page {item.page_id.split('#p')[1]}
+                  📄 {getSourceTitle(item.doc_id)} • {getPageLabel(item.doc_id, getPageNum(item.page_id))}
                   {item.timestamp && ` • ${formatDate(item.timestamp)}`}
                 </div>
                 <div style={{ fontSize: '13px', lineHeight: '1.7', color: '#2c1810', fontFamily: "'Courier New', monospace" }}>
-                  &ldquo;{item.snippet}&rdquo;
+                  {item.snippet ? (
+                    <>&ldquo;{item.snippet}&rdquo;</>
+                  ) : (
+                    <span style={{ fontStyle: 'italic', color: '#6b7280' }}>No excerpt</span>
+                  )}
                 </div>
               </div>
             ))}

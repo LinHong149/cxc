@@ -30,9 +30,17 @@ interface GraphEdge {
   }>;
 }
 
+interface GraphSource {
+  source_id: string;
+  title?: string;
+  file_name?: string;
+  page_labels?: Record<string, string>;
+}
+
 interface GraphData {
   nodes: GraphNode[];
   edges: GraphEdge[];
+  sources?: GraphSource[];
   timeline_range: {
     start: string | null;
     end: string | null;
@@ -109,14 +117,20 @@ export default function ResultsPage() {
       };
     }
     if (selectedNode && graphData) {
-      // Find all edges connected to this node
       const connectedEdges = graphData.edges.filter(
         (e) => e.source === selectedNode.id || e.target === selectedNode.id
       );
       const allEvidence = connectedEdges.flatMap((e) => e.evidence);
+      const seen = new Set<string>();
+      const deduped = allEvidence.filter((ev) => {
+        const key = `${ev.doc_id}|${ev.page_id}|${ev.snippet}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
       return {
-        title: `${selectedNode.label || selectedNode.name} - All Mentions (${allEvidence.length} citations)`,
-        evidence: allEvidence,
+        title: `${selectedNode.label || selectedNode.name} - All Mentions (${deduped.length} citations)`,
+        evidence: deduped,
       };
     }
     return { title: 'Evidence', evidence: [] };
@@ -357,6 +371,7 @@ export default function ResultsPage() {
         <EvidencePanel
           title={evidenceData.title}
           evidence={evidenceData.evidence}
+          sources={graphData?.sources}
           onClose={handleCloseEvidence}
         />
       )}

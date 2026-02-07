@@ -362,6 +362,76 @@ export default function GraphVisualization({
   const [reactFlowNodes, setNodes, onNodesChange] = useNodesState([]);
   const [reactFlowEdges, setEdges, onEdgesChange] = useEdgesState([]);
   const positionCache = useRef<Map<string, { x: number; y: number }>>(new Map());
+  const cacheKeyRef = useRef<string>('');
+
+  // Get cache key based on selected file
+  const getCacheKey = useCallback(() => {
+    if (typeof window === 'undefined') return 'nodePositions_output.json';
+    const fileKey = localStorage.getItem('selectedOutputFile') || 'output.json';
+    return `nodePositions_${fileKey}`;
+  }, []);
+
+  // Load positions from localStorage
+  const loadPositionsFromStorage = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    
+    const key = getCacheKey();
+    cacheKeyRef.current = key;
+    
+    try {
+      const stored = localStorage.getItem(key);
+      if (stored) {
+        const positions = JSON.parse(stored) as Record<string, { x: number; y: number }>;
+        // Only load positions for nodes that currently exist
+        const validPositions: Record<string, { x: number; y: number }> = {};
+        nodes.forEach(node => {
+          if (positions[node.id]) {
+            validPositions[node.id] = positions[node.id];
+          }
+        });
+        positionCache.current = new Map(Object.entries(validPositions));
+      }
+    } catch (e) {
+      console.warn('Failed to load node positions from localStorage', e);
+    }
+  }, [nodes, getCacheKey]);
+
+  // Save positions to localStorage
+  const savePositionsToStorage = useCallback(() => {
+    if (typeof window === 'undefined') return;
+    
+    const key = getCacheKey();
+    cacheKeyRef.current = key;
+    
+    try {
+      // Load existing positions first to preserve positions for nodes not currently visible
+      let existingPositions: Record<string, { x: number; y: number }> = {};
+      try {
+        const stored = localStorage.getItem(key);
+        if (stored) {
+          existingPositions = JSON.parse(stored);
+        }
+      } catch (e) {
+        // Ignore parse errors for existing data
+      }
+      
+      // Update with current positions
+      positionCache.current.forEach((pos, nodeId) => {
+        existingPositions[nodeId] = pos;
+      });
+      
+      localStorage.setItem(key, JSON.stringify(existingPositions));
+    } catch (e) {
+      console.warn('Failed to save node positions to localStorage', e);
+    }
+  }, [getCacheKey]);
+
+  // Load positions when nodes change
+  useEffect(() => {
+    if (nodes.length > 0) {
+      loadPositionsFromStorage();
+    }
+  }, [loadPositionsFromStorage]);
 
   // Convert our nodes to ReactFlow format - d3-force layout (spaced out, no overlap)
   useEffect(() => {
@@ -385,6 +455,9 @@ export default function GraphVisualization({
 
     const imageIds = new Set(nodes.filter((n) => n.type === 'IMAGE').map((n) => n.id));
 
+    // Check if all nodes have cached positions
+    const allNodesHaveCache = nodes.every((node) => cache.has(node.id));
+
     const simNodes = nodes.map((node) => {
       const cached = cache.get(node.id);
       return {
@@ -395,42 +468,49 @@ export default function GraphVisualization({
       };
     });
 
-    const simLinks = edges.map((e) => ({
-      source: e.source,
-      target: e.target,
-    }));
+    // Only run simulation if not all nodes have cached positions
+    // This preserves manual layouts and prevents rearrangement on reload
+    if (!allNodesHaveCache) {
+      const simLinks = edges.map((e) => ({
+        source: e.source,
+        target: e.target,
+      }));
 
-    const simulation = forceSimulation(simNodes)
-      .force(
-        'link',
-        forceLink(simLinks)
-          .id((d) => (d as { id: string }).id)
-          .distance((link) => {
-            const src = link.source as { id?: string };
-            const tgt = link.target as { id?: string };
-            const sourceId = src?.id ?? String(link.source);
-            const targetId = tgt?.id ?? String(link.target);
-            const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
-            return involvesImage ? 120 : 250;
-          })
-          .strength((link) => {
-            const src = link.source as { id?: string };
-            const tgt = link.target as { id?: string };
-            const sourceId = src?.id ?? String(link.source);
-            const targetId = tgt?.id ?? String(link.target);
-            const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
-            return involvesImage ? 1 : 0.6;
-          })
-      )
-      .force('charge', forceManyBody().strength(-450))
-      .force('center', forceCenter(CENTER_X, CENTER_Y))
-      .force('collision', forceCollide<(typeof simNodes)[0]>().radius((d) => d.radius).iterations(5));
+      const simulation = forceSimulation(simNodes)
+        .force(
+          'link',
+          forceLink(simLinks)
+            .id((d) => (d as { id: string }).id)
+            .distance((link) => {
+              const src = link.source as { id?: string };
+              const tgt = link.target as { id?: string };
+              const sourceId = src?.id ?? String(link.source);
+              const targetId = tgt?.id ?? String(link.target);
+              const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
+              return involvesImage ? 120 : 250;
+            })
+            .strength((link) => {
+              const src = link.source as { id?: string };
+              const tgt = link.target as { id?: string };
+              const sourceId = src?.id ?? String(link.source);
+              const targetId = tgt?.id ?? String(link.target);
+              const involvesImage = imageIds.has(sourceId) || imageIds.has(targetId);
+              return involvesImage ? 1 : 0.6;
+            })
+        )
+        .force('charge', forceManyBody().strength(-450))
+        .force('center', forceCenter(CENTER_X, CENTER_Y))
+        .force('collision', forceCollide<(typeof simNodes)[0]>().radius((d) => d.radius).iterations(5));
 
-    for (let i = 0; i < 400; i++) {
-      simulation.tick();
+      for (let i = 0; i < 400; i++) {
+        simulation.tick();
+      }
+
+      simNodes.forEach((n) => cache.set(n.id, { x: n.x, y: n.y }));
+      
+      // Save positions after simulation
+      savePositionsToStorage();
     }
-
-    simNodes.forEach((n) => cache.set(n.id, { x: n.x, y: n.y }));
 
     const flowNodes: Node[] = nodes.map((node) => {
       const pos = cache.get(node.id)!;
@@ -449,7 +529,7 @@ export default function GraphVisualization({
     });
 
     setNodes(flowNodes);
-  }, [nodes, edges, setNodes, selectedNodeIds]);
+  }, [nodes, edges, setNodes, selectedNodeIds, savePositionsToStorage]);
 
   // Convert our edges to ReactFlow format
   useEffect(() => {
@@ -491,6 +571,29 @@ export default function GraphVisualization({
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
+  );
+
+  // Wrap onNodesChange to save positions when nodes are dragged
+  const handleNodesChange = useCallback(
+    (changes: Parameters<typeof onNodesChange>[0]) => {
+      onNodesChange(changes);
+      
+      // Save positions when nodes are dragged
+      changes.forEach((change) => {
+        if (change.type === 'position' && change.position) {
+          const nodeId = change.id;
+          positionCache.current.set(nodeId, change.position);
+        }
+      });
+      
+      // Debounce saving to avoid too many localStorage writes
+      if (changes.some((c) => c.type === 'position')) {
+        setTimeout(() => {
+          savePositionsToStorage();
+        }, 500);
+      }
+    },
+    [onNodesChange, savePositionsToStorage]
   );
 
   const onNodeClickHandler = useCallback(
@@ -569,7 +672,7 @@ export default function GraphVisualization({
         <ReactFlow
           nodes={reactFlowNodes}
           edges={reactFlowEdges}
-          onNodesChange={onNodesChange}
+          onNodesChange={handleNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
           onNodeClick={onNodeClickHandler}

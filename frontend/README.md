@@ -48,14 +48,49 @@ npm run build
 npm start
 ```
 
+## Vercel Deployment
+
+This Next.js app is ready to deploy on Vercel.
+
+### Quick Deploy
+
+1. **Push your code to GitHub** (if not already done)
+
+2. **Deploy to Vercel**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Select the `frontend` directory as the root directory
+   - Click "Deploy"
+
+3. **Test the API endpoints**:
+   - `https://your-project.vercel.app/api/hello` - Hello world endpoint
+   - `https://your-project.vercel.app/api/health` - Health check
+   - `https://your-project.vercel.app/api/graph` - Graph data endpoint
+
+### Environment Variables
+
+If you need to configure environment variables (e.g., for external APIs), add them in the Vercel dashboard under Project Settings → Environment Variables.
+
+### Local Testing
+
+Test the hello world endpoint locally:
+```bash
+curl http://localhost:3000/api/hello
+```
+
+Or visit in your browser: [http://localhost:3000/api/hello](http://localhost:3000/api/hello)
+
 ## Project Structure
 
 ```
 frontend/
 ├── app/
 │   ├── api/
-│   │   ├── graph/route.ts      # API endpoint for graph data
-│   │   └── evidence/route.ts   # API endpoint for evidence details
+│   │   ├── hello/route.ts       # Hello world test endpoint
+│   │   ├── health/route.ts       # Health check endpoint
+│   │   ├── graph/route.ts        # API endpoint for graph data
+│   │   └── evidence/route.ts     # API endpoint for evidence details
 │   ├── globals.css              # Global styles
 │   ├── layout.tsx               # Root layout
 │   └── page.tsx                 # Main detective board page
@@ -69,6 +104,33 @@ frontend/
 ```
 
 ## API Endpoints
+
+### GET `/api/hello`
+
+Simple hello world endpoint for testing.
+
+**Response:**
+```json
+{
+  "message": "Hello World from Timeline Detective Board API!",
+  "timestamp": "2024-01-15T10:30:00.000Z",
+  "status": "success"
+}
+```
+
+### GET `/api/health`
+
+Health check endpoint for monitoring.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "Timeline Detective Board API",
+  "version": "0.1.0",
+  "timestamp": "2024-01-15T10:30:00.000Z"
+}
+```
 
 ### GET `/api/graph`
 

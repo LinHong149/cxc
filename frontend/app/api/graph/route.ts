@@ -296,13 +296,18 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const dateStart = searchParams.get('date_start');
     const dateEnd = searchParams.get('date_end');
+    const fileParam = searchParams.get('file') || 'output.json'; // Default to output.json
+
+    // Validate file parameter
+    const validFiles = ['output.json', 'output2.json'];
+    const fileName = validFiles.includes(fileParam) ? fileParam : 'output.json';
 
     const isVercel = process.env.VERCEL === '1';
 
     if (isVercel) {
       return NextResponse.json(
         {
-          error: 'Graph data is not available on Vercel. The output.json file is not accessible in serverless environment.',
+          error: `Graph data is not available on Vercel. The ${fileName} file is not accessible in serverless environment.`,
           suggestion:
             'Consider using a database (PostgreSQL, MongoDB) or storage service (S3, Vercel Blob) to store parsed data.',
         },
@@ -311,7 +316,7 @@ export async function GET(request: NextRequest) {
     }
 
     const projectRoot = path.resolve(process.cwd(), '..');
-    const outputPath = path.join(projectRoot, 'output.json');
+    const outputPath = path.join(projectRoot, fileName);
 
     let data: OutputSchema;
     try {
@@ -326,7 +331,7 @@ export async function GET(request: NextRequest) {
 
     if (!data.entities || !Array.isArray(data.entities)) {
       return NextResponse.json(
-        { error: 'Invalid output.json schema: expected entities array.' },
+        { error: `Invalid ${fileName} schema: expected entities array.` },
         { status: 400 }
       );
     }

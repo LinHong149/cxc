@@ -40,8 +40,16 @@ export default function Home() {
         throw new Error(data.error || 'Failed to parse PDF');
       }
 
-      // Redirect to results page
+      // Toggle to the other output file when a new file is uploaded
+      if (typeof window !== 'undefined') {
+        const currentFile = localStorage.getItem('selectedOutputFile') || 'output.json';
+        const newFile = currentFile === 'output.json' ? 'output2.json' : 'output.json';
+        localStorage.setItem('selectedOutputFile', newFile);
+      }
+
+      // Redirect to results page - the results page will read from localStorage
       router.push('/results');
+      router.refresh(); // Force refresh to pick up localStorage changes
     } catch (err: any) {
       setError(err.message || 'An error occurred while uploading the file');
     } finally {
@@ -91,7 +99,7 @@ export default function Home() {
             🕵️ Timeline Detective Board
           </h1>
           <p style={{ fontSize: '14px', color: '#8b6f47', fontWeight: '600' }}>
-            Upload case documents to extract entities and build an interactive investigation graph
+            View case documents and toggle between different case files
           </p>
         </div>
 
@@ -170,7 +178,7 @@ export default function Home() {
               boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
             }}
           >
-            {uploading ? '🔍 Processing...' : '📄 Upload & Parse'}
+            {uploading ? '⏳ Uploading...' : '📄 Upload File'}
           </button>
           <button
             onClick={handleViewExisting}

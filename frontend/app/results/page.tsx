@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import GraphVisualization from '@/components/GraphVisualization';
 import TimelineSlider from '@/components/TimelineSlider';
 import EvidencePanel from '@/components/EvidencePanel';
@@ -51,6 +51,7 @@ interface GraphData {
 
 export default function ResultsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
   const [graphLoading, setGraphLoading] = useState(false);
@@ -62,8 +63,42 @@ export default function ResultsPage() {
   const [showEvidence, setShowEvidence] = useState(false);
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [showChat, setShowChat] = useState(false);
+  
+  // File toggle state with localStorage persistence
+  const [selectedFile, setSelectedFile] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('selectedOutputFile') || 'output.json';
+    }
+    return 'output.json';
+  });
 
   const hasLoadedOnce = useRef(false);
+
+  // Sync with localStorage on mount and check for changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const checkAndUpdateFile = () => {
+      const storedFile = localStorage.getItem('selectedOutputFile') || 'output.json';
+      setSelectedFile((currentFile) => {
+        if (storedFile !== currentFile) {
+          hasLoadedOnce.current = false; // Force reload
+          return storedFile;
+        }
+        return currentFile;
+      });
+    };
+
+    // Check on mount and when navigating to this page
+    checkAndUpdateFile();
+
+    // Check periodically in case localStorage was updated (e.g., from upload)
+    const interval = setInterval(checkAndUpdateFile, 200);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const fetchGraphData = useCallback(async () => {
     const isInitial = !hasLoadedOnce.current;
@@ -75,6 +110,7 @@ export default function ResultsPage() {
       const params = new URLSearchParams();
       if (timelineStart) params.append('date_start', timelineStart);
       if (timelineEnd) params.append('date_end', timelineEnd);
+      params.append('file', selectedFile);
 
       const response = await fetch(`/api/graph?${params.toString()}`);
       const data = await response.json();
@@ -91,7 +127,16 @@ export default function ResultsPage() {
       setInitialLoading(false);
       setGraphLoading(false);
     }
-  }, [timelineStart, timelineEnd]);
+  }, [timelineStart, timelineEnd, selectedFile]);
+
+  const handleFileToggle = useCallback(() => {
+    const newFile = selectedFile === 'output.json' ? 'output2.json' : 'output.json';
+    setSelectedFile(newFile);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('selectedOutputFile', newFile);
+    }
+    hasLoadedOnce.current = false; // Force reload
+  }, [selectedFile]);
 
   useEffect(() => {
     fetchGraphData();
@@ -319,6 +364,35 @@ export default function ResultsPage() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button
+            onClick={handleFileToggle}
+            style={{
+              padding: '10px 20px',
+              background: selectedFile === 'output2.json' ? '#654321' : '#8b6f47',
+              color: '#fef9e7',
+              border: '2px solid #654321',
+              borderRadius: '4px',
+              fontSize: '13px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              fontFamily: "'Courier New', monospace",
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#654321';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = selectedFile === 'output2.json' ? '#654321' : '#8b6f47';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            title={`Currently viewing: ${selectedFile}. Click to switch to ${selectedFile === 'output.json' ? 'output2.json' : 'output.json'}`}
+          >
+            📄 {selectedFile === 'output2.json' ? 'output2.json' : 'output.json'}
+          </button>
           <button
             onClick={() => setShowChat(!showChat)}
             style={{

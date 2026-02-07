@@ -35,3 +35,4 @@ output/
 
 
 .env
+backend/normalized_data.json

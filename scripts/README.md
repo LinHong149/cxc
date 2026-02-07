@@ -31,5 +31,5 @@ export OPENAI_API_KEY="sk-proj-..."
 ## Usage
 
 ```bash
-python scripts/parse_pdf.py path/to/document.pdf -o output.json
+python scripts/parse_pdf.py path/to/document.pdf -o backend/normalized_data.json
 ```

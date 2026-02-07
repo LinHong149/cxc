@@ -11,7 +11,7 @@ NEO4J_USER = os.getenv("NEO4J_USER")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 SPACY_MODEL = os.getenv("SPACY_MODEL", "en_core_web_trf")
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DUMMY_PAGES_PATH = os.getenv("DUMMY_PAGES_PATH", os.path.join(_SCRIPT_DIR, "dummy_pages.json"))
+DATA_PATH = os.getenv("DATA_PATH", os.path.join(_SCRIPT_DIR, "normalized_data.json"))
 
 DISABLE_PIPES = ["tagger", "parser", "attribute_ruler", "lemmatizer"]
 
@@ -49,7 +49,7 @@ def main() -> None:
 
     nlp = spacy.load(SPACY_MODEL, disable=DISABLE_PIPES)
 
-    with open(DUMMY_PAGES_PATH) as f:
+    with open(DATA_PATH) as f:
         pages = json.load(f)
 
     driver = GraphDatabase.driver(NEO4J_URI, auth=(NEO4J_USER, NEO4J_PASSWORD))

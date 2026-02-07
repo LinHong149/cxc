@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { format, parseISO } from "date-fns";
-import GraphVisualization from "@/components/GraphVisualization";
+import dynamic from "next/dynamic";
+import { parseISO } from "date-fns";
 import TimelineSlider from "@/components/TimelineSlider";
 import EvidencePanel from "@/components/EvidencePanel";
 import type { GraphResponse, GraphNode, GraphEdge, EvidenceResponse } from "@/types";
+
+const GraphVisualization = dynamic(
+  () => import("@/components/GraphVisualization"),
+  { ssr: false }
+);
 
 export default function Home() {
   const [graphData, setGraphData] = useState<GraphResponse | null>(null);

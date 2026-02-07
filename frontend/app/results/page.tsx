@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import GraphVisualization from '@/components/GraphVisualization';
 import TimelineSlider from '@/components/TimelineSlider';
 import EvidencePanel from '@/components/EvidencePanel';
+import ChatPanel from '@/components/ChatPanel';
 
 interface GraphNode {
   id: string;
@@ -58,6 +59,8 @@ export default function ResultsPage() {
   const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEvidence, setShowEvidence] = useState(false);
+  const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
+  const [showChat, setShowChat] = useState(false);
 
   const hasLoadedOnce = useRef(false);
 
@@ -99,10 +102,13 @@ export default function ResultsPage() {
   }, []);
 
   const handleNodeClick = useCallback((node: GraphNode) => {
-    setSelectedNode(node);
-    setSelectedEdge(null);
-    setShowEvidence(true);
-  }, []);
+    // Only show evidence panel if not doing multi-select
+    if (selectedNodeIds.size === 0) {
+      setSelectedNode(node);
+      setSelectedEdge(null);
+      setShowEvidence(true);
+    }
+  }, [selectedNodeIds]);
 
   const handleEdgeClick = useCallback((edge: GraphEdge) => {
     setSelectedEdge(edge);
@@ -115,6 +121,14 @@ export default function ResultsPage() {
     setSelectedEdge(null);
     setSelectedNode(null);
   }, []);
+
+  const handleNodeSelectionChange = useCallback((selectedIds: Set<string>) => {
+    setSelectedNodeIds(selectedIds);
+  }, []);
+
+  const selectedNodes = graphData
+    ? graphData.nodes.filter((node) => selectedNodeIds.has(node.id))
+    : [];
 
   const getEvidenceData = () => {
     if (selectedEdge) {
@@ -298,36 +312,73 @@ export default function ResultsPage() {
           </h1>
           <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#8b6f47', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             {graphData.nodes.length} {graphData.nodes.length === 1 ? 'ENTITY' : 'ENTITIES'} • {graphData.edges.length} {graphData.edges.length === 1 ? 'CONNECTION' : 'CONNECTIONS'}
+            {selectedNodeIds.size > 0 && (
+              <> • {selectedNodeIds.size} {selectedNodeIds.size === 1 ? 'SELECTED' : 'SELECTED'}</>
+            )}
           </p>
         </div>
-        <button
-          onClick={() => router.push('/')}
-          style={{
-            padding: '10px 20px',
-            background: '#8b6f47',
-            color: '#fef9e7',
-            border: '2px solid #654321',
-            borderRadius: '4px',
-            fontSize: '13px',
-            fontWeight: '700',
-            cursor: 'pointer',
-            fontFamily: "'Courier New', monospace",
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-            transition: 'all 0.2s',
-          }}
-          onMouseOver={(e) => {
-            e.currentTarget.style.background = '#654321';
-            e.currentTarget.style.transform = 'translateY(-1px)';
-          }}
-          onMouseOut={(e) => {
-            e.currentTarget.style.background = '#8b6f47';
-            e.currentTarget.style.transform = 'translateY(0)';
-          }}
-        >
-          📄 Upload New Case
-        </button>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button
+            onClick={() => setShowChat(!showChat)}
+            style={{
+              padding: '10px 20px',
+              background: showChat ? '#654321' : '#8b6f47',
+              color: '#fef9e7',
+              border: '2px solid #654321',
+              borderRadius: '4px',
+              fontSize: '13px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              fontFamily: "'Courier New', monospace",
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={(e) => {
+              if (!showChat) {
+                e.currentTarget.style.background = '#654321';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }
+            }}
+            onMouseOut={(e) => {
+              if (!showChat) {
+                e.currentTarget.style.background = '#8b6f47';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }
+            }}
+          >
+            💬 {showChat ? 'Close Chat' : 'Chat'}
+          </button>
+          <button
+            onClick={() => router.push('/')}
+            style={{
+              padding: '10px 20px',
+              background: '#8b6f47',
+              color: '#fef9e7',
+              border: '2px solid #654321',
+              borderRadius: '4px',
+              fontSize: '13px',
+              fontWeight: '700',
+              cursor: 'pointer',
+              fontFamily: "'Courier New', monospace",
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+              transition: 'all 0.2s',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = '#654321';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = '#8b6f47';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            📄 Upload New Case
+          </button>
+        </div>
       </header>
 
       <div style={{ flex: 1, display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
@@ -393,6 +444,8 @@ export default function ResultsPage() {
             timelineRange={graphData.timeline_range}
             onNodeClick={handleNodeClick}
             onEdgeClick={handleEdgeClick}
+            selectedNodeIds={selectedNodeIds}
+            onNodeSelectionChange={handleNodeSelectionChange}
           />
         </div>
       </div>
@@ -403,6 +456,14 @@ export default function ResultsPage() {
           evidence={evidenceData.evidence}
           sources={graphData?.sources}
           onClose={handleCloseEvidence}
+        />
+      )}
+
+      {showChat && (
+        <ChatPanel
+          selectedNodes={selectedNodes}
+          edges={graphData?.edges || []}
+          onClose={() => setShowChat(false)}
         />
       )}
     </div>

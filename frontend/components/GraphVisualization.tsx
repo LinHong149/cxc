@@ -51,6 +51,8 @@ interface GraphVisualizationProps {
   timelineRange?: { start: string | null; end: string | null };
   onNodeClick?: (node: GraphNode) => void;
   onEdgeClick?: (edge: GraphEdge) => void;
+  selectedNodeIds?: Set<string>;
+  onNodeSelectionChange?: (selectedIds: Set<string>) => void;
 }
 
 function formatDate(dateStr: string): string {
@@ -62,7 +64,7 @@ function formatDate(dateStr: string): string {
 }
 
 // Custom node component - Detective Board Style
-const EntityNode = ({ data }: { data: GraphNode }) => {
+const EntityNode = ({ data, selected }: { data: GraphNode; selected?: boolean }) => {
   const getNodeColor = (type: string) => {
     switch (type) {
       case 'PERSON':
@@ -99,15 +101,18 @@ const EntityNode = ({ data }: { data: GraphNode }) => {
   return (
     <div
       style={{
-        background: '#fef9e7',
-        border: `2px solid ${color}`,
+        background: selected ? '#fff8dc' : '#fef9e7',
+        border: `3px solid ${selected ? '#ff6b35' : color}`,
         borderRadius: '4px',
         padding: '12px 16px',
         minWidth: '140px',
-        boxShadow: 
-          '0 4px 8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 111, 71, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+        boxShadow: selected
+          ? '0 6px 12px rgba(255, 107, 53, 0.4), 0 0 0 2px rgba(255, 107, 53, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+          : '0 4px 8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 111, 71, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
         position: 'relative',
         fontFamily: "'Courier New', monospace",
+        transform: selected ? 'scale(1.05)' : 'scale(1)',
+        transition: 'all 0.2s ease',
       }}
     >
       {/* Pin effect */}
@@ -220,6 +225,8 @@ export default function GraphVisualization({
   timelineRange,
   onNodeClick,
   onEdgeClick,
+  selectedNodeIds = new Set(),
+  onNodeSelectionChange,
 }: GraphVisualizationProps) {
   const [reactFlowNodes, setNodes, onNodesChange] = useNodesState([]);
   const [reactFlowEdges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -281,11 +288,12 @@ export default function GraphVisualization({
           ...node,
           label: node.label || node.name,
         },
+        selected: selectedNodeIds?.has(node.id) || false,
       };
     });
 
     setNodes(flowNodes);
-  }, [nodes, edges, setNodes]);
+  }, [nodes, edges, setNodes, selectedNodeIds]);
 
   // Convert our edges to ReactFlow format
   useEffect(() => {
@@ -331,11 +339,29 @@ export default function GraphVisualization({
 
   const onNodeClickHandler = useCallback(
     (event: React.MouseEvent, node: Node) => {
-      if (onNodeClick) {
-        onNodeClick(node.data as GraphNode);
+      // Handle multi-select with Ctrl/Cmd key
+      if (event.ctrlKey || event.metaKey) {
+        if (onNodeSelectionChange) {
+          const newSelection = new Set(selectedNodeIds);
+          if (newSelection.has(node.id)) {
+            newSelection.delete(node.id);
+          } else {
+            newSelection.add(node.id);
+          }
+          onNodeSelectionChange(newSelection);
+        }
+      } else {
+        // Single click behavior
+        if (onNodeClick) {
+          onNodeClick(node.data as GraphNode);
+        }
+        // Clear selection on single click
+        if (onNodeSelectionChange && selectedNodeIds.size > 0) {
+          onNodeSelectionChange(new Set());
+        }
       }
     },
-    [onNodeClick]
+    [onNodeClick, selectedNodeIds, onNodeSelectionChange]
   );
 
   const onEdgeClickHandler = useCallback(
@@ -396,6 +422,9 @@ export default function GraphVisualization({
           fitView
           fitViewOptions={{ padding: 0.2 }}
           style={{ background: 'transparent' }}
+          nodesDraggable={true}
+          nodesConnectable={false}
+          selectNodesOnDrag={false}
         >
           <Controls 
             style={{

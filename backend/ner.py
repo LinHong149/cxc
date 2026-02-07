@@ -10,7 +10,8 @@ NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USER = os.getenv("NEO4J_USER")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")
 SPACY_MODEL = os.getenv("SPACY_MODEL", "en_core_web_trf")
-DUMMY_PAGES_PATH = os.getenv("DUMMY_PAGES_PATH", "dummy_pages.json")
+_SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DUMMY_PAGES_PATH = os.getenv("DUMMY_PAGES_PATH", os.path.join(_SCRIPT_DIR, "dummy_pages.json"))
 
 DISABLE_PIPES = ["tagger", "parser", "attribute_ruler", "lemmatizer"]
 
@@ -25,7 +26,6 @@ MERGE (p:Page {page_id: $page.page_id})
 SET p.doc_id = $page.doc_id,
     p.source_type = $page.source_type,
     p.source_uri = $page.source_uri,
-    p.summary = $page.summary,
     p.text = $page.text
 
 WITH p, $entities AS entities

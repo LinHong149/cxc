@@ -39,21 +39,24 @@ export default function Home() {
       setGraphData(data);
 
       // Initialize date range if not set
-      if (!dateRange && data.timeline_range) {
-        const start = parseISO(data.timeline_range.start);
-        const end = parseISO(data.timeline_range.end);
-        setDateRange({ start, end });
-      }
+      setDateRange((prev) => {
+        if (!prev && data.timeline_range) {
+          const start = parseISO(data.timeline_range.start);
+          const end = parseISO(data.timeline_range.end);
+          return { start, end };
+        }
+        return prev;
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");
     } finally {
       setLoading(false);
     }
-  }, [dateRange]);
+  }, []);
 
   useEffect(() => {
     fetchGraphData();
-  }, []);
+  }, [fetchGraphData]);
 
   const handleTimelineChange = useCallback(
     (start: Date, end: Date) => {

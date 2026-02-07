@@ -3,6 +3,9 @@ import fs from "fs";
 import path from "path";
 import type { EvidenceResponse, ParsedPage } from "@/types";
 
+// Force dynamic rendering since we use request.url and file system
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

@@ -3,6 +3,9 @@ import fs from "fs";
 import path from "path";
 import type { GraphResponse, ParsedPage } from "@/types";
 
+// Force dynamic rendering since we use request.url and file system
+export const dynamic = 'force-dynamic';
+
 // Mock function to build graph from parsed pages
 // In production, this would query a database
 function buildGraphFromPages(pages: ParsedPage[]): GraphResponse {

@@ -23,6 +23,7 @@ interface GraphEdge {
     doc_id: string;
     page_id: string;
     snippet: string;
+    anchor?: string;
     timestamp?: string;
   }>;
 }
@@ -139,7 +140,8 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
     const refined = evidence.map((ev) => ({
       doc_id: ev.source_id,
       page_id: toPageId(ev.source_id, ev.page),
-      snippet: ev.anchor || ev.evidence || summary || '',
+      snippet: summary || ev.anchor || ev.evidence || '',
+      anchor: ev.anchor || ev.evidence,
       timestamp: timeStart,
     }));
 
@@ -182,7 +184,7 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
 
     const ev = (c.evidence || []).map((e) => ({
       ...e,
-      anchor: e.anchor ?? c.summary,
+      anchor: e.anchor,
     }));
     addEvidenceToEdge(c.subject, c.object, ev, start, c.summary);
   }
@@ -200,12 +202,17 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
     updateNodeDates(r.subject, start, end);
     updateNodeDates(r.object, start, end);
 
+    const subjName = entityMap.get(r.subject)?.name || r.subject;
+    const objName = entityMap.get(r.object)?.name || r.object;
+    const predReadable = (r.predicate || '').replace(/_/g, ' ');
+    const relSummary = `${subjName} ${predReadable} ${objName}.`;
+
     const ev = (r.evidence || []).map((e) => ({
       source_id: e.source_id,
       page: e.page,
       anchor: e.anchor,
     }));
-    addEvidenceToEdge(r.subject, r.object, ev, start);
+    addEvidenceToEdge(r.subject, r.object, ev, start, relSummary);
   }
 
   // Fallback: entity first_seen/last_seen from events

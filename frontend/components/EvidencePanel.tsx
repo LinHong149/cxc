@@ -7,6 +7,7 @@ interface Evidence {
   doc_id: string;
   page_id: string;
   snippet: string;
+  anchor?: string;
   timestamp?: string;
 }
 
@@ -142,11 +143,14 @@ export default function EvidencePanel({ title, evidence, sources, onClose }: Evi
                   }}
                 >
                   📄 {getSourceTitle(item.doc_id)} • {getPageLabel(item.doc_id, getPageNum(item.page_id))}
+                  {item.anchor && ` • ${item.anchor}`}
                   {item.timestamp && ` • ${formatDate(item.timestamp)}`}
                 </div>
                 <div style={{ fontSize: '13px', lineHeight: '1.7', color: '#2c1810', fontFamily: "'Courier New', monospace" }}>
                   {item.snippet ? (
                     <>&ldquo;{item.snippet}&rdquo;</>
+                  ) : item.anchor ? (
+                    <>&ldquo;{item.anchor}&rdquo;</>
                   ) : (
                     <span style={{ fontStyle: 'italic', color: '#6b7280' }}>No excerpt</span>
                   )}

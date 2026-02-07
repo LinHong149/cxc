@@ -63,6 +63,7 @@ function ResultsPageContent() {
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [showEvidence, setShowEvidence] = useState(false);
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
+  const [chatNodeIds, setChatNodeIds] = useState<Set<string>>(new Set());
   const [showChat, setShowChat] = useState(false);
   
   // File toggle state with localStorage persistence
@@ -149,13 +150,14 @@ function ResultsPageContent() {
   }, []);
 
   const handleNodeClick = useCallback((node: GraphNode) => {
-    // Only show evidence panel if not doing multi-select
-    if (selectedNodeIds.size === 0) {
+    // When chat is open, selection is handled by GraphVisualization via onNodeSelectionChange
+    // When chat is closed: show evidence panel (unless doing multi-select)
+    if (!showChat && selectedNodeIds.size === 0) {
       setSelectedNode(node);
       setSelectedEdge(null);
       setShowEvidence(true);
     }
-  }, [selectedNodeIds]);
+  }, [showChat, selectedNodeIds]);
 
   const handleEdgeClick = useCallback((edge: GraphEdge) => {
     setSelectedEdge(edge);
@@ -170,12 +172,30 @@ function ResultsPageContent() {
   }, []);
 
   const handleNodeSelectionChange = useCallback((selectedIds: Set<string>) => {
-    setSelectedNodeIds(selectedIds);
-  }, []);
+    if (showChat) {
+      setChatNodeIds(selectedIds);
+    } else {
+      setSelectedNodeIds(selectedIds);
+    }
+  }, [showChat]);
 
   const selectedNodes = graphData
     ? graphData.nodes.filter((node) => selectedNodeIds.has(node.id))
     : [];
+
+  const chatNodes = graphData
+    ? graphData.nodes.filter((node) => chatNodeIds.has(node.id))
+    : [];
+
+  const handleOpenChat = useCallback(() => {
+    setShowChat(true);
+    setChatNodeIds(new Set());
+  }, []);
+
+  const handleCloseChat = useCallback(() => {
+    setShowChat(false);
+    setChatNodeIds(new Set());
+  }, []);
 
   const getEvidenceData = () => {
     if (selectedEdge) {
@@ -395,7 +415,7 @@ function ResultsPageContent() {
             📄 {selectedFile === 'output2.json' ? 'output2.json' : 'output.json'}
           </button>
           <button
-            onClick={() => setShowChat(!showChat)}
+            onClick={() => (showChat ? handleCloseChat() : handleOpenChat())}
             style={{
               padding: '10px 20px',
               background: showChat ? '#654321' : '#8b6f47',
@@ -530,8 +550,9 @@ function ResultsPageContent() {
             timelineRange={graphData.timeline_range}
             onNodeClick={handleNodeClick}
             onEdgeClick={handleEdgeClick}
-            selectedNodeIds={selectedNodeIds}
+            selectedNodeIds={showChat ? chatNodeIds : selectedNodeIds}
             onNodeSelectionChange={handleNodeSelectionChange}
+            singleClickTogglesSelection={showChat}
           />
         </div>
       </div>
@@ -547,9 +568,9 @@ function ResultsPageContent() {
 
       {showChat && (
         <ChatPanel
-          selectedNodes={selectedNodes}
+          selectedNodes={chatNodes}
           edges={graphData?.edges || []}
-          onClose={() => setShowChat(false)}
+          onClose={handleCloseChat}
         />
       )}
     </div>

@@ -217,7 +217,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
         >
           <div style={{ fontWeight: '700', marginBottom: '4px' }}>Selected:</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-            {selectedNodes.map((node) => (
+            {Array.from(new Map(selectedNodes.map((n) => [n.id, n])).values()).map((node) => (
               <span
                 key={node.id}
                 style={{
@@ -262,7 +262,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
             </div>
             <div style={{ fontSize: '11px' }}>
               {selectedNodes.length === 0
-                ? 'Select nodes (Ctrl/Cmd + Click) to get started'
+                ? 'Click on nodes in the graph to add them'
                 : 'Try asking: "What is the relationship between these entities?"'}
             </div>
           </div>
@@ -353,7 +353,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
             onKeyPress={handleKeyPress}
             placeholder={
               selectedNodes.length === 0
-                ? 'Select nodes first (Ctrl/Cmd + Click)...'
+                ? 'Click nodes in the graph to add them first...'
                 : 'Ask a question about the selected nodes...'
             }
             disabled={loading || selectedNodes.length === 0}

@@ -54,6 +54,8 @@ interface GraphVisualizationProps {
   onEdgeClick?: (edge: GraphEdge) => void;
   selectedNodeIds?: Set<string>;
   onNodeSelectionChange?: (selectedIds: Set<string>) => void;
+  /** When true, single-click toggles selection instead of clearing. Used for chat node selection. */
+  singleClickTogglesSelection?: boolean;
 }
 
 function formatDate(dateStr: string): string {
@@ -358,6 +360,7 @@ export default function GraphVisualization({
   onEdgeClick,
   selectedNodeIds = new Set(),
   onNodeSelectionChange,
+  singleClickTogglesSelection = false,
 }: GraphVisualizationProps) {
   const [reactFlowNodes, setNodes, onNodesChange] = useNodesState([]);
   const [reactFlowEdges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -598,29 +601,26 @@ export default function GraphVisualization({
 
   const onNodeClickHandler = useCallback(
     (event: React.MouseEvent, node: Node) => {
-      // Handle multi-select with Ctrl/Cmd key
-      if (event.ctrlKey || event.metaKey) {
-        if (onNodeSelectionChange) {
-          const newSelection = new Set(selectedNodeIds);
-          if (newSelection.has(node.id)) {
-            newSelection.delete(node.id);
-          } else {
-            newSelection.add(node.id);
-          }
-          onNodeSelectionChange(newSelection);
+      const isToggleMode = event.ctrlKey || event.metaKey || singleClickTogglesSelection;
+      if (isToggleMode && onNodeSelectionChange) {
+        const newSelection = new Set(selectedNodeIds);
+        if (newSelection.has(node.id)) {
+          newSelection.delete(node.id);
+        } else {
+          newSelection.add(node.id);
         }
-      } else {
-        // Single click behavior
+        onNodeSelectionChange(newSelection);
+      } else if (!singleClickTogglesSelection) {
+        // Single click without toggle mode: invoke handler and clear selection
         if (onNodeClick) {
           onNodeClick(node.data as GraphNode);
         }
-        // Clear selection on single click
         if (onNodeSelectionChange && selectedNodeIds.size > 0) {
           onNodeSelectionChange(new Set());
         }
       }
     },
-    [onNodeClick, selectedNodeIds, onNodeSelectionChange]
+    [onNodeClick, selectedNodeIds, onNodeSelectionChange, singleClickTogglesSelection]
   );
 
   const onEdgeClickHandler = useCallback(

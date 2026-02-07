@@ -252,8 +252,9 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
   }
   let nodes = Array.from(entityMap.values()).filter((n) => connectedIds.has(n.id));
 
-  // Add image nodes and edges to connected entities
+  // Add image nodes and edges to connected entities (dedupe by path - output may have duplicate images)
   const allImages = data.images || [];
+  const addedImageIds = new Set<string>();
   for (const img of allImages) {
     const entityIds = img.entities || [];
     const connectedToGraph = entityIds.filter((id) => connectedIds.has(id));
@@ -261,18 +262,21 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
 
     const imageId = `image_${img.path.replace(/[/.]/g, '_')}`;
     const imageName = path.basename(img.path, path.extname(img.path)).replace(/-/g, ' ');
-    const imageNode: GraphNode = {
-      id: imageId,
-      name: imageName,
-      label: imageName,
-      type: 'IMAGE',
-      mention_count: connectedToGraph.length,
-      first_seen: undefined,
-      last_seen: undefined,
-      documents: [],
-      image: img.path,
-    };
-    nodes.push(imageNode);
+    if (!addedImageIds.has(imageId)) {
+      addedImageIds.add(imageId);
+      const imageNode: GraphNode = {
+        id: imageId,
+        name: imageName,
+        label: imageName,
+        type: 'IMAGE',
+        mention_count: connectedToGraph.length,
+        first_seen: undefined,
+        last_seen: undefined,
+        documents: [],
+        image: img.path,
+      };
+      nodes.push(imageNode);
+    }
 
     for (const entityId of connectedToGraph) {
       const key = edgeKey(imageId, entityId);

@@ -49,56 +49,93 @@ interface GraphVisualizationProps {
   onEdgeClick?: (edge: GraphEdge) => void;
 }
 
-// Custom node component
+// Custom node component - Detective Board Style
 const EntityNode = ({ data }: { data: GraphNode }) => {
   const getNodeColor = (type: string) => {
     switch (type) {
       case 'PERSON':
-        return '#3b82f6'; // blue
+        return '#8b4513'; // detective brown/red
       case 'ORG':
-        return '#10b981'; // green
+        return '#654321'; // dark brown
       case 'GPE':
-        return '#f59e0b'; // amber
+        return '#6b4423'; // medium brown
       case 'DATE':
-        return '#8b5cf6'; // purple
+        return '#5d4037'; // darker brown
       default:
-        return '#6b7280'; // gray
+        return '#8b6f47'; // cork brown
+    }
+  };
+
+  const getNodeIcon = (type: string) => {
+    switch (type) {
+      case 'PERSON':
+        return '👤';
+      case 'ORG':
+        return '🏢';
+      case 'GPE':
+        return '📍';
+      case 'DATE':
+        return '📅';
+      default:
+        return '📋';
     }
   };
 
   const color = getNodeColor(data.type);
+  const icon = getNodeIcon(data.type);
 
   return (
     <div
       style={{
-        background: 'white',
-        border: `3px solid ${color}`,
-        borderRadius: '8px',
-        padding: '10px 15px',
-        minWidth: '120px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        background: '#fef9e7',
+        border: `2px solid ${color}`,
+        borderRadius: '4px',
+        padding: '12px 16px',
+        minWidth: '140px',
+        boxShadow: 
+          '0 4px 8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 111, 71, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+        position: 'relative',
+        fontFamily: "'Courier New', monospace",
       }}
     >
-      <Handle type="target" position={Position.Top} />
+      {/* Pin effect */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '-10px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontSize: '18px',
+          filter: 'drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3))',
+          zIndex: 10,
+        }}
+      >
+        📌
+      </div>
+      
+      <Handle type="target" position={Position.Top} style={{ background: color, width: '8px', height: '8px' }} />
       <div style={{ textAlign: 'center' }}>
+        <div style={{ fontSize: '20px', marginBottom: '6px' }}>{icon}</div>
         <div
           style={{
-            fontSize: '12px',
+            fontSize: '11px',
             fontWeight: 'bold',
             color: color,
-            marginBottom: '4px',
+            marginBottom: '6px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
           }}
         >
           {data.type}
         </div>
-        <div style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px' }}>
+        <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '6px', color: '#2c1810' }}>
           {data.label || data.name}
         </div>
-        <div style={{ fontSize: '11px', color: '#6b7280' }}>
-          {data.mention_count} mentions
+        <div style={{ fontSize: '10px', color: '#6b4423', borderTop: `1px solid ${color}`, paddingTop: '6px', marginTop: '6px' }}>
+          {data.mention_count} {data.mention_count === 1 ? 'mention' : 'mentions'}
         </div>
       </div>
-      <Handle type="source" position={Position.Bottom} />
+      <Handle type="source" position={Position.Bottom} style={{ background: color, width: '8px', height: '8px' }} />
     </div>
   );
 };
@@ -171,8 +208,22 @@ export default function GraphVisualization({
       target: edge.target,
       label: `${edge.weight}`,
       style: {
-        strokeWidth: Math.min(edge.weight * 2, 8),
-        stroke: '#94a3b8',
+        strokeWidth: Math.min(edge.weight * 2 + 2, 10),
+        stroke: '#8b6f47',
+        strokeDasharray: edge.weight > 1 ? '0' : '5,5',
+        opacity: 0.7,
+      },
+      labelStyle: {
+        fill: '#654321',
+        fontWeight: 'bold',
+        fontSize: '12px',
+        background: '#fef9e7',
+        padding: '2px 6px',
+        borderRadius: '3px',
+      },
+      labelBgStyle: {
+        fill: '#fef9e7',
+        fillOpacity: 0.9,
       },
       data: edge,
     }));
@@ -231,7 +282,16 @@ export default function GraphVisualization({
 
   return (
     <ReactFlowProvider>
-      <div style={{ width: '100%', height: '100%', minHeight: '600px' }}>
+      <div 
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          minHeight: '600px',
+          background: '#d4a574',
+          position: 'relative',
+        }}
+        className="detective-board-bg"
+      >
         <ReactFlow
           nodes={reactFlowNodes}
           edges={reactFlowEdges}
@@ -243,10 +303,26 @@ export default function GraphVisualization({
           nodeTypes={nodeTypes}
           fitView
           fitViewOptions={{ padding: 0.2 }}
+          style={{ background: 'transparent' }}
         >
-          <Controls />
-          <MiniMap />
-          <Background />
+          <Controls 
+            style={{
+              background: 'rgba(254, 249, 231, 0.9)',
+              border: '2px solid #8b6f47',
+              borderRadius: '4px',
+            }}
+          />
+          <MiniMap 
+            style={{
+              background: 'rgba(254, 249, 231, 0.9)',
+              border: '2px solid #8b6f47',
+            }}
+            nodeColor="#8b6f47"
+          />
+          <Background 
+            gap={20}
+            size={1}
+          />
         </ReactFlow>
       </div>
     </ReactFlowProvider>

@@ -257,39 +257,54 @@ export default function ResultsPage() {
   const evidenceData = getEvidenceData();
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f9fafb', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column' }} className="detective-board-bg">
       <header
         style={{
-          background: 'white',
+          background: '#fef9e7',
           padding: '16px 24px',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '3px solid #8b6f47',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+          fontFamily: "'Courier New', monospace",
         }}
       >
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#1f2937' }}>
-            🕵️ Timeline Detective Board
+          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#654321', fontFamily: "'Courier New', monospace" }}>
+            🕵️ TIMELINE DETECTIVE BOARD
           </h1>
-          <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: '#6b7280' }}>
-            {graphData.nodes.length} entities • {graphData.edges.length} connections
+          <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#8b6f47', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            {graphData.nodes.length} {graphData.nodes.length === 1 ? 'ENTITY' : 'ENTITIES'} • {graphData.edges.length} {graphData.edges.length === 1 ? 'CONNECTION' : 'CONNECTIONS'}
           </p>
         </div>
         <button
           onClick={() => router.push('/')}
           style={{
             padding: '10px 20px',
-            background: '#667eea',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: '600',
+            background: '#8b6f47',
+            color: '#fef9e7',
+            border: '2px solid #654321',
+            borderRadius: '4px',
+            fontSize: '13px',
+            fontWeight: '700',
             cursor: 'pointer',
+            fontFamily: "'Courier New', monospace",
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+            transition: 'all 0.2s',
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#654321';
+            e.currentTarget.style.transform = 'translateY(-1px)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = '#8b6f47';
+            e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
-          Upload New PDF
+          📄 Upload New Case
         </button>
       </header>
 
@@ -309,9 +324,10 @@ export default function ResultsPage() {
             flex: 1,
             position: 'relative',
             margin: '0 20px 20px 20px',
-            background: 'white',
-            borderRadius: '12px',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            background: 'transparent',
+            borderRadius: '8px',
+            border: '3px solid #8b6f47',
+            boxShadow: 'inset 0 0 20px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.2)',
             overflow: 'hidden',
             minHeight: '600px',
             height: 'calc(100vh - 300px)',

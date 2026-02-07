@@ -50,16 +50,19 @@ export default function TimelineSlider({
   return (
     <div
       style={{
-        background: 'white',
+        background: '#fef9e7',
         padding: '20px',
         borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        border: '2px solid #8b6f47',
+        boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5)',
         marginBottom: '20px',
+        fontFamily: "'Courier New', monospace",
+        position: 'relative',
       }}
     >
       <div style={{ marginBottom: '15px' }}>
-        <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', fontWeight: '600' }}>
-          Timeline Filter
+        <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', fontWeight: '700', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+          📅 Timeline Filter
         </h3>
         <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ flex: '1', minWidth: '200px' }}>
@@ -134,16 +137,20 @@ export default function TimelineSlider({
                 onClick={clearFilters}
                 style={{
                   padding: '8px 16px',
-                  background: '#ef4444',
-                  color: 'white',
-                  border: 'none',
+                  background: '#8b6f47',
+                  color: '#fef9e7',
+                  border: '2px solid #654321',
                   borderRadius: '4px',
                   cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '500',
+                  fontSize: '12px',
+                  fontWeight: '700',
+                  fontFamily: "'Courier New', monospace",
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
                 }}
               >
-                Clear
+                ✕ Clear
               </button>
             </div>
           )}

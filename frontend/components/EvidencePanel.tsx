@@ -34,24 +34,30 @@ export default function EvidencePanel({ title, evidence, onClose }: EvidencePane
         top: 0,
         width: '400px',
         height: '100vh',
-        background: 'white',
-        boxShadow: '-2px 0 8px rgba(0,0,0,0.1)',
+        background: '#fef9e7',
+        borderLeft: '3px solid #8b6f47',
+        boxShadow: '-4px 0 12px rgba(0,0,0,0.3)',
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        fontFamily: "'Courier New', monospace",
       }}
     >
       <div
         style={{
           padding: '20px',
-          borderBottom: '1px solid #e5e7eb',
+          borderBottom: '2px solid #8b6f47',
+          background: '#fffef0',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
         }}
       >
-        <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '600' }}>{title}</h2>
+        <h2 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: '#654321', fontFamily: "'Courier New', monospace" }}>
+          📋 {title}
+        </h2>
         <button
           onClick={onClose}
           style={{
@@ -88,26 +94,34 @@ export default function EvidencePanel({ title, evidence, onClose }: EvidencePane
             {evidence.map((item, index) => (
               <div
                 key={index}
+                className="evidence-file"
                 style={{
                   padding: '15px',
-                  background: '#f9fafb',
-                  borderRadius: '8px',
-                  border: '1px solid #e5e7eb',
+                  background: '#fffef0',
+                  borderRadius: '4px',
+                  border: '1px solid #8b6f47',
+                  borderLeft: '4px solid #8b6f47',
+                  marginBottom: '12px',
+                  position: 'relative',
                 }}
               >
                 <div
                   style={{
-                    fontSize: '12px',
-                    fontWeight: '600',
-                    color: '#6b7280',
-                    marginBottom: '8px',
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    color: '#654321',
+                    marginBottom: '10px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    borderBottom: '1px solid #8b6f47',
+                    paddingBottom: '6px',
                   }}
                 >
-                  {item.doc_id} • Page {item.page_id.split('#p')[1]}
+                  📄 {item.doc_id} • Page {item.page_id.split('#p')[1]}
                   {item.timestamp && ` • ${formatDate(item.timestamp)}`}
                 </div>
-                <div style={{ fontSize: '14px', lineHeight: '1.6', color: '#1f2937' }}>
-                  {item.snippet}
+                <div style={{ fontSize: '13px', lineHeight: '1.7', color: '#2c1810', fontFamily: "'Courier New', monospace" }}>
+                  "{item.snippet}"
                 </div>
               </div>
             ))}

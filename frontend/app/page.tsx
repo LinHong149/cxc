@@ -57,21 +57,24 @@ export default function Home() {
     <div
       style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: '#d4a574',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
+        fontFamily: "'Courier New', monospace",
       }}
+      className="detective-board-bg"
     >
       <div
         style={{
-          background: 'white',
-          borderRadius: '16px',
+          background: '#fef9e7',
+          borderRadius: '8px',
           padding: '40px',
           maxWidth: '600px',
           width: '100%',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          border: '3px solid #8b6f47',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.5)',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
@@ -79,26 +82,29 @@ export default function Home() {
             style={{
               fontSize: '32px',
               fontWeight: '700',
-              color: '#1f2937',
+              color: '#654321',
               marginBottom: '10px',
+              textTransform: 'uppercase',
+              letterSpacing: '1px',
             }}
           >
             🕵️ Timeline Detective Board
           </h1>
-          <p style={{ fontSize: '16px', color: '#6b7280' }}>
-            Upload documents to extract entities and build an interactive investigation graph
+          <p style={{ fontSize: '14px', color: '#8b6f47', fontWeight: '600' }}>
+            Upload case documents to extract entities and build an interactive investigation graph
           </p>
         </div>
 
         <div
           style={{
-            border: '2px dashed #d1d5db',
-            borderRadius: '12px',
+            border: '3px dashed #8b6f47',
+            borderRadius: '8px',
             padding: '40px',
             textAlign: 'center',
             marginBottom: '20px',
-            background: '#f9fafb',
+            background: '#fffef0',
             transition: 'all 0.3s',
+            borderStyle: 'dashed',
           }}
         >
           <input
@@ -116,10 +122,10 @@ export default function Home() {
             }}
           >
             <div style={{ fontSize: '48px', marginBottom: '16px' }}>📄</div>
-            <div style={{ fontSize: '18px', fontWeight: '600', color: '#1f2937', marginBottom: '8px' }}>
+            <div style={{ fontSize: '16px', fontWeight: '700', color: '#654321', marginBottom: '8px', fontFamily: "'Courier New', monospace" }}>
               {file ? file.name : 'Click to select PDF file'}
             </div>
-            <div style={{ fontSize: '14px', color: '#6b7280' }}>
+            <div style={{ fontSize: '12px', color: '#8b6f47', fontWeight: '600' }}>
               {file ? 'Click again to change file' : 'or drag and drop'}
             </div>
           </label>
@@ -128,15 +134,18 @@ export default function Home() {
         {error && (
           <div
             style={{
-              background: '#fee2e2',
-              color: '#dc2626',
+              background: '#fffef0',
+              color: '#8b4513',
               padding: '12px',
-              borderRadius: '8px',
+              borderRadius: '4px',
               marginBottom: '20px',
-              fontSize: '14px',
+              fontSize: '13px',
+              border: '2px solid #8b4513',
+              fontFamily: "'Courier New', monospace",
+              fontWeight: '600',
             }}
           >
-            {error}
+            ⚠️ {error}
           </div>
         )}
 
@@ -147,51 +156,58 @@ export default function Home() {
             style={{
               flex: 1,
               padding: '14px 24px',
-              background: uploading ? '#9ca3af' : '#667eea',
-              color: 'white',
-              border: 'none',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '600',
+              background: uploading ? '#9ca3af' : '#8b6f47',
+              color: '#fef9e7',
+              border: '2px solid #654321',
+              borderRadius: '4px',
+              fontSize: '14px',
+              fontWeight: '700',
               cursor: uploading || !file ? 'not-allowed' : 'pointer',
               transition: 'all 0.2s',
+              fontFamily: "'Courier New', monospace",
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
             }}
           >
-            {uploading ? 'Processing...' : 'Upload & Parse'}
+            {uploading ? '🔍 Processing...' : '📄 Upload & Parse'}
           </button>
           <button
             onClick={handleViewExisting}
             style={{
               padding: '14px 24px',
-              background: 'white',
-              color: '#667eea',
-              border: '2px solid #667eea',
-              borderRadius: '8px',
-              fontSize: '16px',
-              fontWeight: '600',
+              background: '#fef9e7',
+              color: '#8b6f47',
+              border: '2px solid #8b6f47',
+              borderRadius: '4px',
+              fontSize: '14px',
+              fontWeight: '700',
               cursor: 'pointer',
               transition: 'all 0.2s',
+              fontFamily: "'Courier New', monospace",
+              textTransform: 'uppercase',
+              letterSpacing: '0.5px',
             }}
           >
-            View Existing
+            🔍 View Case Files
           </button>
         </div>
 
-        <div style={{ marginTop: '30px', paddingTop: '30px', borderTop: '1px solid #e5e7eb' }}>
-          <h3 style={{ fontSize: '16px', fontWeight: '600', marginBottom: '12px', color: '#1f2937' }}>
-            What this tool does:
+        <div style={{ marginTop: '30px', paddingTop: '30px', borderTop: '2px solid #8b6f47' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: '700', marginBottom: '12px', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            📋 Case Analysis Features:
           </h3>
           <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-            <li style={{ padding: '8px 0', fontSize: '14px', color: '#6b7280' }}>
+            <li style={{ padding: '8px 0', fontSize: '13px', color: '#8b6f47', fontWeight: '600', fontFamily: "'Courier New', monospace" }}>
               ✓ Extracts people, organizations, and locations from documents
             </li>
-            <li style={{ padding: '8px 0', fontSize: '14px', color: '#6b7280' }}>
+            <li style={{ padding: '8px 0', fontSize: '13px', color: '#8b6f47', fontWeight: '600', fontFamily: "'Courier New', monospace" }}>
               ✓ Builds relationship graphs based on co-mentions
             </li>
-            <li style={{ padding: '8px 0', fontSize: '14px', color: '#6b7280' }}>
+            <li style={{ padding: '8px 0', fontSize: '13px', color: '#8b6f47', fontWeight: '600', fontFamily: "'Courier New', monospace" }}>
               ✓ Provides timeline filtering to explore connections over time
             </li>
-            <li style={{ padding: '8px 0', fontSize: '14px', color: '#6b7280' }}>
+            <li style={{ padding: '8px 0', fontSize: '13px', color: '#8b6f47', fontWeight: '600', fontFamily: "'Courier New', monospace" }}>
               ✓ Shows evidence citations for every connection
             </li>
           </ul>

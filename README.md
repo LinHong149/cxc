@@ -87,6 +87,260 @@ The key feature is time-based navigation:
 
 ---
 
+## 📐 Architecture & Data Flow
+
+```mermaid
+flowchart TD
+    A[DOJ Website] -->|Scrape Documents| B[Document Scraper]
+    B -->|Raw PDFs/Documents| C[Raw Data Storage<br/>S3 / Local FS / Postgres]
+    C -->|Extract Text| D[PDF Parser<br/>pdfplumber]
+    D -->|Clean Text| E[NER Processing<br/>spaCy]
+    E -->|Extract Entities<br/>PERSON, ORG, GPE, DATE| F[Entity Mentions<br/>+ Evidence Snippets]
+    F -->|Build Relationships| G[Graph Construction<br/>Co-mention Analysis]
+    G -->|Store Graph| H[Graph Database<br/>Neo4j / Postgres + pgvector]
+    H -->|Query API| I[FastAPI Backend<br/>REST Endpoints]
+    I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
+    J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
+    
+    style A fill:#e1f5ff
+    style C fill:#fff4e1
+    style E fill:#ffe1f5
+    style H fill:#e1ffe1
+    style J fill:#f5e1ff
+    style K fill:#ffe1e1
+```
+
+---
+
+## 📋 Data Schemas by Stage
+
+### 1. Raw Data Storage (After Scraping)
+
+```json
+{
+  "doc_id": "doc_000123",
+  "source_type": "pdf|email|image|web",
+  "source_uri": "s3://bucket/000123.pdf",
+  "scraped_at": "2024-01-15T10:30:00Z",
+  "metadata": {
+    "title": "Document Title",
+    "date": "2004-04-12",
+    "author": null,
+    "url": "https://www.justice.gov/...",
+    "file_size": 245678,
+    "mime_type": "application/pdf"
+  },
+  "raw_content": "<binary or raw text>"
+}
+```
+
+### 2. NER Input (After PDF Parser)
+
+```json
+{
+  "doc_id": "doc_000123",
+  "source_type": "pdf|email|image|web",
+  "source_uri": "s3://bucket/000123.pdf",
+  "page_id": "doc_000123#p04",
+  "text": "On April 12, 2004, John Doe met Jane Smith in Palm Beach...",
+  "page_number": 4,
+  "extracted_at": "2024-01-15T10:35:00Z",
+  "document_timestamp": "2004-04-12T00:00:00Z"
+}
+```
+
+### 3. NER Output (Extracted Entities)
+
+```json
+{
+  "doc_id": "doc_000123",
+  "page_id": "doc_000123#p04",
+  "entities": [
+    {
+      "entity_id": "ent_001",
+      "text": "John Doe",
+      "type": "PERSON",
+      "start_char": 20,
+      "end_char": 28,
+      "confidence": 0.95,
+      "sentence": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "sentence_start": 0,
+      "sentence_end": 65
+    },
+    {
+      "entity_id": "ent_002",
+      "text": "Jane Smith",
+      "type": "PERSON",
+      "start_char": 33,
+      "end_char": 43,
+      "confidence": 0.94,
+      "sentence": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "sentence_start": 0,
+      "sentence_end": 65
+    },
+    {
+      "entity_id": "ent_003",
+      "text": "Palm Beach",
+      "type": "GPE",
+      "start_char": 47,
+      "end_char": 57,
+      "confidence": 0.92,
+      "sentence": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "sentence_start": 0,
+      "sentence_end": 65
+    },
+    {
+      "entity_id": "ent_004",
+      "text": "April 12, 2004",
+      "type": "DATE",
+      "start_char": 3,
+      "end_char": 17,
+      "confidence": 0.98,
+      "normalized_date": "2004-04-12",
+      "sentence": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "sentence_start": 0,
+      "sentence_end": 65
+    }
+  ],
+  "processed_at": "2024-01-15T10:36:00Z"
+}
+```
+
+### 4. Graph Database Schema
+
+#### Nodes (Entities)
+```json
+{
+  "id": "ent_001",
+  "name": "John Doe",
+  "type": "PERSON",
+  "canonical_id": "person_john_doe_001",
+  "first_seen": "2004-04-12T00:00:00Z",
+  "last_seen": "2004-08-15T00:00:00Z",
+  "mention_count": 47,
+  "documents": ["doc_000123", "doc_000456"],
+  "aliases": ["J. Doe", "John D."]
+}
+```
+
+#### Edges (Relationships)
+```json
+{
+  "edge_id": "edge_001",
+  "src_entity_id": "ent_001",
+  "dst_entity_id": "ent_002",
+  "relationship_type": "mentioned_with",
+  "weight": 12,
+  "first_seen": "2004-04-12T00:00:00Z",
+  "last_seen": "2004-08-15T00:00:00Z",
+  "evidence": [
+    {
+      "doc_id": "doc_000123",
+      "page_id": "doc_000123#p04",
+      "snippet": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "timestamp": "2004-04-12T00:00:00Z",
+      "sentence_start": 0,
+      "sentence_end": 65
+    },
+    {
+      "doc_id": "doc_000456",
+      "page_id": "doc_000456#p12",
+      "snippet": "John Doe and Jane Smith attended the meeting together.",
+      "timestamp": "2004-05-20T00:00:00Z",
+      "sentence_start": 0,
+      "sentence_end": 52
+    }
+  ],
+  "evidence_count": 12
+}
+```
+
+### 5. API Response (Frontend)
+
+#### Graph Query Response
+```json
+{
+  "nodes": [
+    {
+      "id": "ent_001",
+      "label": "John Doe",
+      "type": "PERSON",
+      "data": {
+        "mention_count": 47,
+        "first_seen": "2004-04-12T00:00:00Z",
+        "last_seen": "2004-08-15T00:00:00Z",
+        "documents": ["doc_000123", "doc_000456"]
+      }
+    },
+    {
+      "id": "ent_002",
+      "label": "Jane Smith",
+      "type": "PERSON",
+      "data": {
+        "mention_count": 32,
+        "first_seen": "2004-04-12T00:00:00Z",
+        "last_seen": "2004-07-10T00:00:00Z",
+        "documents": ["doc_000123", "doc_000789"]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_001",
+      "source": "ent_001",
+      "target": "ent_002",
+      "label": "mentioned_with",
+      "weight": 12,
+      "data": {
+        "evidence_count": 12,
+        "first_seen": "2004-04-12T00:00:00Z",
+        "last_seen": "2004-08-15T00:00:00Z"
+      }
+    }
+  ],
+  "timeline_range": {
+    "start": "2004-04-12T00:00:00Z",
+    "end": "2004-08-15T00:00:00Z"
+  },
+  "filter_applied": {
+    "date_start": "2004-04-01T00:00:00Z",
+    "date_end": "2004-06-30T00:00:00Z"
+  }
+}
+```
+
+#### Evidence Detail Response
+```json
+{
+  "edge_id": "edge_001",
+  "src_entity": {
+    "id": "ent_001",
+    "name": "John Doe",
+    "type": "PERSON"
+  },
+  "dst_entity": {
+    "id": "ent_002",
+    "name": "Jane Smith",
+    "type": "PERSON"
+  },
+  "evidence": [
+    {
+      "doc_id": "doc_000123",
+      "page_id": "doc_000123#p04",
+      "page_number": 4,
+      "snippet": "On April 12, 2004, John Doe met Jane Smith in Palm Beach.",
+      "timestamp": "2004-04-12T00:00:00Z",
+      "source_uri": "s3://bucket/000123.pdf",
+      "context_before": "...previous sentence...",
+      "context_after": "...next sentence..."
+    }
+  ],
+  "total_evidence_count": 12
+}
+```
+
+---
+
 ## 🖥️ Tech Stack
 
 ### Backend

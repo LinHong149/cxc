@@ -69,13 +69,42 @@ The PDF parser uses OpenAI's API for generating summaries and extracting dates. 
 
    The script will automatically use OpenAI if `OPENAI_API_KEY` is set. By default, it uses `gpt-4o-mini` for cost efficiency.
 
+### Frontend Setup
+
+The frontend is a Next.js application located in the `frontend/` directory.
+
+1. **Navigate to the frontend directory**:
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+The frontend will automatically read `output.json` from the project root after you've parsed some PDFs.
+
 ### Development Setup
 
-The project uses:
+**Backend:**
 - `pdfplumber` for PDF text extraction
 - `python-dateutil` for date parsing
 - `openai` for LLM-powered summarization and date extraction
 - `transformers` and `torch` (optional, for local models)
+
+**Frontend:**
+- Next.js 14 with TypeScript
+- React Flow for graph visualization
+- Tailwind CSS for styling
 
 ---
 

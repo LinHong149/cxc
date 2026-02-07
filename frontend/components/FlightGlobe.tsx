@@ -142,9 +142,11 @@ export default function FlightGlobe({
         flexDirection: 'column',
         gap: '12px',
         fontFamily: "'Courier New', monospace",
+        height: '100%',
+        minHeight: 0,
       }}
     >
-      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+      <h3 style={{ margin: 0, fontSize: '16px', fontWeight: '700', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px', flexShrink: 0 }}>
         ✈️ Flight Tracker
       </h3>
 
@@ -158,6 +160,7 @@ export default function FlightGlobe({
           borderRadius: '8px',
           overflow: 'hidden',
           border: '2px solid #8b6f47',
+          flexShrink: 0,
         }}
       >
         <Globe
@@ -190,7 +193,8 @@ export default function FlightGlobe({
       {/* Flight list */}
       <div
         style={{
-          maxHeight: '180px',
+          flex: 1,
+          minHeight: 0,
           overflowY: 'auto',
           background: 'rgba(254, 249, 231, 0.8)',
           borderRadius: '6px',

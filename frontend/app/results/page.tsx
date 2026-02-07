@@ -465,7 +465,9 @@ function ResultsPageContent() {
             background: '#fef9e7',
             borderRight: '3px solid #8b6f47',
             padding: '20px',
-            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden',
             boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
           }}
         >
@@ -477,7 +479,7 @@ function ResultsPageContent() {
             onChange={handleTimelineChange}
           />
 
-          <div style={{ marginTop: '20px' }}>
+          <div style={{ marginTop: '20px', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
             <FlightGlobe
               timelineStart={timelineStart}
               timelineEnd={timelineEnd}

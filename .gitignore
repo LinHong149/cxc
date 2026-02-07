@@ -22,6 +22,7 @@ Thumbs.db
 
 # Project specific
 *.pdf
+!sample_data/*.pdf
 !sample_data/.gitkeep
 output/
 *.json

@@ -257,7 +257,7 @@ export default function ResultsPage() {
   const evidenceData = getEvidenceData();
 
   return (
-    <div style={{ minHeight: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column' }} className="detective-board-bg">
+    <div style={{ height: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column', overflow: 'hidden' }} className="detective-board-bg">
       <header
         style={{
           background: '#fef9e7',
@@ -268,6 +268,7 @@ export default function ResultsPage() {
           alignItems: 'center',
           boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
           fontFamily: "'Courier New', monospace",
+          flexShrink: 0,
         }}
       >
         <div>
@@ -308,8 +309,18 @@ export default function ResultsPage() {
         </button>
       </header>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-        <div style={{ padding: '20px' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
+        {/* Sidebar with Timeline Filter */}
+        <div
+          style={{
+            width: '300px',
+            background: '#fef9e7',
+            borderRight: '3px solid #8b6f47',
+            padding: '20px',
+            overflowY: 'auto',
+            boxShadow: '2px 0 8px rgba(0,0,0,0.1)',
+          }}
+        >
           <TimelineSlider
             startDate={dateStart}
             endDate={dateEnd}
@@ -319,18 +330,18 @@ export default function ResultsPage() {
           />
         </div>
 
+        {/* Main Graph Area */}
         <div
           style={{
             flex: 1,
             position: 'relative',
-            margin: '0 20px 20px 20px',
+            margin: '20px',
             background: 'transparent',
             borderRadius: '8px',
             border: '3px solid #8b6f47',
             boxShadow: 'inset 0 0 20px rgba(0,0,0,0.1), 0 4px 12px rgba(0,0,0,0.2)',
             overflow: 'hidden',
-            minHeight: '600px',
-            height: 'calc(100vh - 300px)',
+            minHeight: 0,
           }}
         >
           <GraphVisualization

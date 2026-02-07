@@ -50,12 +50,12 @@ export default function TimelineSlider({
   return (
     <div
       style={{
-        background: '#fef9e7',
-        padding: '20px',
-        borderRadius: '8px',
-        border: '2px solid #8b6f47',
-        boxShadow: '0 4px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5)',
-        marginBottom: '20px',
+        background: 'transparent',
+        padding: '0',
+        borderRadius: '0',
+        border: 'none',
+        boxShadow: 'none',
+        marginBottom: '0',
         fontFamily: "'Courier New', monospace",
         position: 'relative',
       }}
@@ -64,15 +64,17 @@ export default function TimelineSlider({
         <h3 style={{ margin: '0 0 15px 0', fontSize: '18px', fontWeight: '700', color: '#654321', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
           📅 Timeline Filter
         </h3>
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div style={{ flex: '1', minWidth: '200px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <div>
             <label
               style={{
                 display: 'block',
                 fontSize: '12px',
-                fontWeight: '500',
-                color: '#6b7280',
-                marginBottom: '5px',
+                fontWeight: '600',
+                color: '#654321',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
               }}
             >
               Start Date
@@ -85,27 +87,31 @@ export default function TimelineSlider({
               max={maxDate || undefined}
               style={{
                 width: '100%',
-                padding: '8px',
-                border: '1px solid #d1d5db',
+                padding: '10px',
+                border: '2px solid #8b6f47',
                 borderRadius: '4px',
-                fontSize: '14px',
+                fontSize: '13px',
+                background: '#fffef0',
+                fontFamily: "'Courier New', monospace",
               }}
             />
             {startDate && (
-              <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
+              <div style={{ fontSize: '11px', color: '#8b6f47', marginTop: '6px', fontWeight: '600' }}>
                 {formatDate(startDate)}
               </div>
             )}
           </div>
 
-          <div style={{ flex: '1', minWidth: '200px' }}>
+          <div>
             <label
               style={{
                 display: 'block',
                 fontSize: '12px',
-                fontWeight: '500',
-                color: '#6b7280',
-                marginBottom: '5px',
+                fontWeight: '600',
+                color: '#654321',
+                marginBottom: '8px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
               }}
             >
               End Date
@@ -118,41 +124,43 @@ export default function TimelineSlider({
               max={maxDate || undefined}
               style={{
                 width: '100%',
-                padding: '8px',
-                border: '1px solid #d1d5db',
+                padding: '10px',
+                border: '2px solid #8b6f47',
                 borderRadius: '4px',
-                fontSize: '14px',
+                fontSize: '13px',
+                background: '#fffef0',
+                fontFamily: "'Courier New', monospace",
               }}
             />
             {endDate && (
-              <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px' }}>
+              <div style={{ fontSize: '11px', color: '#8b6f47', marginTop: '6px', fontWeight: '600' }}>
                 {formatDate(endDate)}
               </div>
             )}
           </div>
 
           {(startDate || endDate) && (
-            <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-              <button
-                onClick={clearFilters}
-                style={{
-                  padding: '8px 16px',
-                  background: '#8b6f47',
-                  color: '#fef9e7',
-                  border: '2px solid #654321',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '12px',
-                  fontWeight: '700',
-                  fontFamily: "'Courier New', monospace",
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                }}
-              >
-                ✕ Clear
-              </button>
-            </div>
+            <button
+              onClick={clearFilters}
+              style={{
+                width: '100%',
+                padding: '10px 16px',
+                background: '#8b6f47',
+                color: '#fef9e7',
+                border: '2px solid #654321',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontSize: '12px',
+                fontWeight: '700',
+                fontFamily: "'Courier New', monospace",
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+                marginTop: '10px',
+              }}
+            >
+              ✕ Clear Filters
+            </button>
           )}
         </div>
       </div>

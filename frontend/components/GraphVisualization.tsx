@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef } from 'react';
 import { format, parseISO } from 'date-fns';
+import { forceSimulation, forceLink, forceManyBody, forceCenter, forceCollide } from 'd3-force';
 import ReactFlow, {
   Node,
   Edge,
@@ -28,6 +29,7 @@ interface GraphNode {
   first_seen?: string;
   last_seen?: string;
   documents: string[];
+  image?: string;
 }
 
 interface GraphEdge {
@@ -141,7 +143,8 @@ const EntityNode = ({ data }: { data: GraphNode }) => {
         <div style={{ fontSize: '14px', fontWeight: '700', marginBottom: '6px', color: '#2c1810' }}>
           {data.label || data.name}
         </div>
-        {(data.first_seen || data.last_seen) ? (
+        {!(data.id === 'person_epstein_jeffrey' || data.id === 'person_maxwell_ghislaine') &&
+        (data.first_seen || data.last_seen) ? (
           <div style={{ fontSize: '10px', color: '#6b4423', borderTop: `1px solid ${color}`, paddingTop: '6px', marginTop: '6px' }}>
             {data.first_seen && data.last_seen
               ? `${formatDate(data.first_seen)} – ${formatDate(data.last_seen)}`
@@ -160,8 +163,55 @@ const EntityNode = ({ data }: { data: GraphNode }) => {
   );
 };
 
+// Image node component - displays image with connections
+const ImageNode = ({ data }: { data: GraphNode }) => {
+  const imageUrl = data.image ? `/api/image?path=${encodeURIComponent(data.image)}` : null;
+
+  return (
+    <div
+      style={{
+        background: '#fef9e7',
+        border: '2px solid #8b6f47',
+        borderRadius: '4px',
+        padding: '8px',
+        minWidth: '120px',
+        maxWidth: '180px',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(139, 111, 71, 0.1)',
+        position: 'relative',
+        fontFamily: "'Courier New', monospace",
+      }}
+    >
+      <Handle type="target" position={Position.Top} style={{ background: '#8b6f47', width: '8px', height: '8px' }} />
+      <div style={{ textAlign: 'center' }}>
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={data.name}
+            style={{
+              width: '100%',
+              height: '100px',
+              objectFit: 'cover',
+              borderRadius: '4px',
+              display: 'block',
+            }}
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100px', background: '#e8dcc8', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>
+            🖼️
+          </div>
+        )}
+        <div style={{ fontSize: '10px', fontWeight: '700', color: '#654321', marginTop: '6px', textTransform: 'uppercase' }}>
+          {data.label || data.name}
+        </div>
+      </div>
+      <Handle type="source" position={Position.Bottom} style={{ background: '#8b6f47', width: '8px', height: '8px' }} />
+    </div>
+  );
+};
+
 const nodeTypes: NodeTypes = {
   entity: EntityNode,
+  image: ImageNode,
 };
 
 export default function GraphVisualization({
@@ -175,7 +225,7 @@ export default function GraphVisualization({
   const [reactFlowEdges, setEdges, onEdgesChange] = useEdgesState([]);
   const positionCache = useRef<Map<string, { x: number; y: number }>>(new Map());
 
-  // Convert our nodes to ReactFlow format - random layout with position cache
+  // Convert our nodes to ReactFlow format - d3-force layout (spaced out, no overlap)
   useEffect(() => {
     if (nodes.length === 0) {
       setNodes([]);
@@ -183,23 +233,49 @@ export default function GraphVisualization({
       return;
     }
 
-    const PADDING = 80;
-    const AREA_WIDTH = 1200;
-    const AREA_HEIGHT = 900;
+    const WIDTH = 1400;
+    const HEIGHT = 1100;
+    const CENTER_X = WIDTH / 2;
+    const CENTER_Y = HEIGHT / 2;
+    const NODE_RADIUS = 95;
     const cache = positionCache.current;
 
-    const flowNodes: Node[] = nodes.map((node) => {
-      let pos = cache.get(node.id);
-      if (!pos) {
-        pos = {
-          x: PADDING + Math.random() * AREA_WIDTH,
-          y: PADDING + Math.random() * AREA_HEIGHT,
-        };
-        cache.set(node.id, pos);
-      }
+    const simNodes = nodes.map((node) => {
+      const cached = cache.get(node.id);
       return {
         id: node.id,
-        type: 'entity',
+        x: cached?.x ?? CENTER_X + (Math.random() - 0.5) * 400,
+        y: cached?.y ?? CENTER_Y + (Math.random() - 0.5) * 400,
+      };
+    });
+
+    const simLinks = edges.map((e) => ({
+      source: e.source,
+      target: e.target,
+    }));
+
+    const simulation = forceSimulation(simNodes)
+      .force(
+        'link',
+        forceLink(simLinks)
+          .id((d) => (d as { id: string }).id)
+          .distance(280)
+      )
+      .force('charge', forceManyBody().strength(-600))
+      .force('center', forceCenter(CENTER_X, CENTER_Y))
+      .force('collision', forceCollide(NODE_RADIUS));
+
+    for (let i = 0; i < 250; i++) {
+      simulation.tick();
+    }
+
+    simNodes.forEach((n) => cache.set(n.id, { x: n.x, y: n.y }));
+
+    const flowNodes: Node[] = nodes.map((node) => {
+      const pos = cache.get(node.id)!;
+      return {
+        id: node.id,
+        type: node.type === 'IMAGE' ? 'image' : 'entity',
         position: pos,
         data: {
           ...node,
@@ -209,7 +285,7 @@ export default function GraphVisualization({
     });
 
     setNodes(flowNodes);
-  }, [nodes, setNodes]);
+  }, [nodes, edges, setNodes]);
 
   // Convert our edges to ReactFlow format
   useEffect(() => {
@@ -222,7 +298,8 @@ export default function GraphVisualization({
       id: edge.id,
       source: edge.source,
       target: edge.target,
-      label: `${edge.weight}`,
+      type: 'straight',
+      label: '',
       style: {
         strokeWidth: Math.min(edge.weight * 2 + 2, 10),
         stroke: '#8b6f47',

@@ -12,6 +12,7 @@ interface GraphNode {
   first_seen?: string;
   last_seen?: string;
   documents: string[];
+  image?: string;
 }
 
 interface GraphEdge {
@@ -70,6 +71,14 @@ interface OutputSource {
   page_labels?: Record<string, string>;
 }
 
+interface OutputImage {
+  path: string;
+  entities?: string[];
+  events?: string[];
+  claims?: string[];
+  relationships?: string[];
+}
+
 interface OutputSchema {
   schema_version?: string;
   sources?: OutputSource[];
@@ -77,6 +86,7 @@ interface OutputSchema {
   claims?: OutputClaim[];
   relationships?: OutputRelationship[];
   events?: OutputEvent[];
+  images?: OutputImage[];
 }
 
 function toPageId(sourceId: string, page: number): string {
@@ -237,9 +247,45 @@ function buildGraphFromOutput(data: OutputSchema, dateStart: string | null, date
     connectedIds.add(e.source);
     connectedIds.add(e.target);
   }
-  const nodes = Array.from(entityMap.values()).filter((n) => connectedIds.has(n.id));
+  let nodes = Array.from(entityMap.values()).filter((n) => connectedIds.has(n.id));
 
-  return { nodes, edges, timelineStart, timelineEnd };
+  // Add image nodes and edges to connected entities
+  const allImages = data.images || [];
+  for (const img of allImages) {
+    const entityIds = img.entities || [];
+    const connectedToGraph = entityIds.filter((id) => connectedIds.has(id));
+    if (connectedToGraph.length === 0) continue;
+
+    const imageId = `image_${img.path.replace(/[/.]/g, '_')}`;
+    const imageName = path.basename(img.path, path.extname(img.path)).replace(/-/g, ' ');
+    const imageNode: GraphNode = {
+      id: imageId,
+      name: imageName,
+      label: imageName,
+      type: 'IMAGE',
+      mention_count: connectedToGraph.length,
+      first_seen: undefined,
+      last_seen: undefined,
+      documents: [],
+      image: img.path,
+    };
+    nodes.push(imageNode);
+
+    for (const entityId of connectedToGraph) {
+      const key = edgeKey(imageId, entityId);
+      const [s, t] = imageId < entityId ? [imageId, entityId] : [entityId, imageId];
+      edgeMap.set(key, {
+        id: key,
+        source: s,
+        target: t,
+        weight: 1,
+        evidence: [{ doc_id: '', page_id: '', snippet: `Image: ${imageName}` }],
+      });
+    }
+  }
+
+  const finalEdges = Array.from(edgeMap.values());
+  return { nodes, edges: finalEdges, timelineStart, timelineEnd };
 }
 
 export async function GET(request: NextRequest) {

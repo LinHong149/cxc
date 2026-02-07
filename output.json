@@ -1113,6 +1113,70 @@
       ]
     }
   ],
+  "images": [
+    {
+      "path": "sample_data/images/epstein-and-maxwell.png",
+      "entities": ["person_maxwell_ghislaine", "person_epstein_jeffrey"],
+      "events": [
+        "event_relationship_1994_1997",
+        "event_grooming_scheme_1994_1997",
+        "event_mv1_contact_1994_1997",
+        "event_mv2_nm_trip_1996",
+        "event_mv3_london_1994_1995"
+      ],
+      "claims": [
+        "claim_001_assisted_epstein_1994_1997",
+        "claim_002_enticed_travel_across_states",
+        "claim_003_group_sexualized_massages_mv1",
+        "claim_004_mv2_unsolicited_massage_1996",
+        "claim_005_mv3_london_massages_1994_1995",
+        "claim_006_perjury_apr_22_2016",
+        "claim_007_perjury_jul_22_2016"
+      ],
+      "relationships": ["rel_001_maxwell_associate_epstein"]
+    },
+    {
+      "path": "sample_data/images/new-york-residence.png",
+      "entities": ["place_ny_residence", "person_epstein_jeffrey"],
+      "events": [
+        "event_grooming_scheme_1994_1997",
+        "event_mv1_contact_1994_1997"
+      ],
+      "claims": [
+        "claim_001_assisted_epstein_1994_1997",
+        "claim_002_enticed_travel_across_states",
+        "claim_003_group_sexualized_massages_mv1"
+      ],
+      "relationships": ["rel_002_epstein_owned_ny_residence"]
+    },
+    {
+      "path": "sample_data/images/palm-beach-residence.png",
+      "entities": ["place_palm_beach_residence", "person_epstein_jeffrey"],
+      "events": [
+        "event_grooming_scheme_1994_1997",
+        "event_mv1_contact_1994_1997"
+      ],
+      "claims": [
+        "claim_001_assisted_epstein_1994_1997",
+        "claim_002_enticed_travel_across_states",
+        "claim_003_group_sexualized_massages_mv1"
+      ],
+      "relationships": ["rel_003_epstein_owned_palm_beach_residence"]
+    },
+    {
+      "path": "sample_data/images/santa-fe-ranch.png",
+      "entities": ["place_new_mexico_residence", "person_epstein_jeffrey"],
+      "events": [
+        "event_grooming_scheme_1994_1997",
+        "event_mv2_nm_trip_1996"
+      ],
+      "claims": [
+        "claim_001_assisted_epstein_1994_1997",
+        "claim_004_mv2_unsolicited_massage_1996"
+      ],
+      "relationships": ["rel_004_epstein_owned_new_mexico_residence"]
+    }
+  ],
   "integrity": {
     "warnings": [
       "This output reflects allegations in an indictment, not adjudicated findings.",

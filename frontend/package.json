@@ -9,11 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "d3-force": "^3.0.0",
+    "date-fns": "^3.0.0",
     "next": "^16.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "reactflow": "^11.11.0",
-    "date-fns": "^3.0.0"
+    "reactflow": "^11.11.0"
   },
   "devDependencies": {
     "@types/node": "^20",

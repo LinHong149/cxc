@@ -16,13 +16,9 @@
     "next": "^16.1.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-<<<<<<< HEAD
     "reactflow": "^11.11.0",
-    "openai": "^4.0.0"
-=======
-    "react-leaflet": "^4.2.1",
-    "reactflow": "^11.11.0"
->>>>>>> 1b32b20 (Graph strength)
+    "openai": "^4.0.0",
+    "react-leaflet": "^4.2.1"
   },
   "devDependencies": {
     "@types/node": "^20",

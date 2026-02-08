@@ -359,23 +359,7 @@ function ResultsPageContent() {
   const evidenceData = getEvidenceData();
 
   return (
-    <div style={{ height: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }} className="detective-board-bg">
-      {/* Talking bear in corner - decorative background element */}
-      <img
-        src="/talking_bear.gif"
-        alt=""
-        style={{
-          position: 'absolute',
-          bottom: '20px',
-          left: '20px',
-          width: '120px',
-          height: '120px',
-          objectFit: 'contain',
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: 0.7,
-        }}
-      />
+    <div style={{ height: '100vh', background: '#D7AB7C', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }} className="detective-board-bg">
       <header
         style={{
           background: '#fef9e7',
@@ -544,6 +528,40 @@ function ResultsPageContent() {
             minHeight: 0,
           }}
         >
+          {/* Talking bear - only visible when chat is open, with faded edges mask */}
+          {showChat && (
+            <div
+              className="bear-dance"
+              style={{
+                position: 'absolute',
+                bottom: '70px',
+                left: '20px',
+                width: '120px',
+                height: '120px',
+                zIndex: 1,
+                pointerEvents: 'none',
+                maskImage: 'radial-gradient(ellipse 80% 80% at 50% 50%, black 55%, transparent 100%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 80% 80% at 60% 60%, black 25%, transparent 100%)',
+                maskSize: '100% 100%',
+                WebkitMaskSize: '100% 100%',
+                maskPosition: 'center',
+                WebkitMaskPosition: 'center',
+                maskRepeat: 'no-repeat',
+                WebkitMaskRepeat: 'no-repeat',
+              }}
+            >
+              <img
+                src="/talking_bear.gif"
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  display: 'block',
+                }}
+              />
+            </div>
+          )}
           {graphLoading && (
             <div
               style={{
@@ -552,7 +570,7 @@ function ResultsPageContent() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'rgba(212, 165, 116, 0.9)',
+                background: 'rgba(215, 171, 124, 0.9)',
                 borderRadius: '8px',
                 zIndex: 10,
                 fontFamily: "'Courier New', monospace",
@@ -609,7 +627,7 @@ export default function ResultsPage() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: '#d4a574',
+            background: '#D7AB7C',
           }}
         >
           <div style={{ textAlign: 'center' }}>

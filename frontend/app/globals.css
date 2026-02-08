@@ -22,16 +22,16 @@ body {
 .detective-board-bg {
     background:
         repeating-linear-gradient(0deg,
-            #d4a574 0px,
-            #d4a574 1px,
+            #D7AB7C 0px,
+            #D7AB7C 1px,
             #c99a6a 1px,
             #c99a6a 2px),
         repeating-linear-gradient(90deg,
-            #d4a574 0px,
-            #d4a574 1px,
+            #D7AB7C 0px,
+            #D7AB7C 1px,
             #c99a6a 1px,
             #c99a6a 2px);
-    background-color: #d4a574;
+    background-color: #D7AB7C;
     background-size: 20px 20px;
     position: relative;
 }
@@ -102,4 +102,17 @@ body {
     border-style: solid;
     border-width: 0 15px 15px 0;
     border-color: transparent #8b6f47 transparent transparent;
+}
+
+/* Sliding bear animation */
+@keyframes bear-slide {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(8px, -6px); }
+    50% { transform: translate(-6px, 4px); }
+    75% { transform: translate(6px, 8px); }
+}
+
+.bear-dance {
+    animation: bear-slide 2s ease-in-out infinite;
+    transform-origin: center bottom;
 }

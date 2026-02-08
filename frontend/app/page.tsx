@@ -65,7 +65,7 @@ export default function Home() {
     <div
       style={{
         minHeight: '100vh',
-        background: '#d4a574',
+        background: '#D7AB7C',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',

@@ -17,6 +17,9 @@ import ReactFlow, {
   Handle,
   Position,
   ReactFlowProvider,
+  getStraightPath,
+  BaseEdge,
+  type EdgeProps,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -168,6 +171,89 @@ const EntityNode = ({ data, selected }: { data: GraphNode; selected?: boolean })
       </div>
       <Handle type="source" position={Position.Bottom} style={{ background: color, width: '8px', height: '8px' }} />
     </div>
+  );
+};
+
+// Custom edge with mask-based fade (opaque in middle, transparent at ends)
+// Uses SVG mask instead of gradient-on-stroke (which fails for vertical/horizontal lines)
+const FadeEdge = (props: EdgeProps) => {
+  const {
+    id,
+    sourceX,
+    sourceY,
+    targetX,
+    targetY,
+    style = {},
+    label,
+    labelStyle,
+    labelShowBg,
+    labelBgStyle,
+    labelBgPadding,
+    labelBgBorderRadius,
+    markerEnd,
+    markerStart,
+    interactionWidth,
+  } = props;
+  const [path, labelX, labelY] = getStraightPath({ sourceX, sourceY, targetX, targetY });
+  const maskId = `fade-mask-${id.replace(/[^a-z0-9-]/gi, '_')}`;
+  const gradId = `fade-mask-grad-${id.replace(/[^a-z0-9-]/gi, '_')}`;
+  const strokeWidth = (style?.strokeWidth as number) ?? 4;
+  const stroke = (style?.stroke as string) ?? '#8b6f47';
+  const strokeDasharray = style?.strokeDasharray as string | undefined;
+
+  // Mask rect must cover the path; gradient runs from source to target
+  const padding = strokeWidth * 4 + 50;
+  const minX = Math.min(sourceX, targetX) - padding;
+  const minY = Math.min(sourceY, targetY) - padding;
+  const rectW = Math.max(Math.abs(targetX - sourceX), 1) + 2 * padding;
+  const rectH = Math.max(Math.abs(targetY - sourceY), 1) + 2 * padding;
+
+  return (
+    <>
+      <defs>
+        <linearGradient
+          id={gradId}
+          x1={sourceX}
+          y1={sourceY}
+          x2={targetX}
+          y2={targetY}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop offset="0%" stopColor="white" stopOpacity="0" />
+          <stop offset="0.25" stopColor="white" stopOpacity="0.6" />
+          <stop offset="0.5" stopColor="white" stopOpacity="1" />
+          <stop offset="0.75" stopColor="white" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="white" stopOpacity="0" />
+        </linearGradient>
+        <mask id={maskId}>
+          <rect x={minX} y={minY} width={rectW} height={rectH} fill={`url(#${gradId})`} />
+        </mask>
+      </defs>
+      <g mask={`url(#${maskId})`}>
+        <BaseEdge
+          id={id}
+          path={path}
+          labelX={labelX}
+          labelY={labelY}
+          label={label}
+          labelStyle={labelStyle}
+          labelShowBg={labelShowBg}
+          labelBgStyle={labelBgStyle}
+          labelBgPadding={labelBgPadding}
+          labelBgBorderRadius={labelBgBorderRadius}
+          markerEnd={markerEnd}
+          markerStart={markerStart}
+          interactionWidth={interactionWidth}
+          style={{
+            ...style,
+            stroke,
+            strokeWidth,
+            strokeDasharray: strokeDasharray ?? 'none',
+            fill: 'none',
+          }}
+        />
+      </g>
+    </>
   );
 };
 
@@ -350,6 +436,10 @@ const nodeTypes: NodeTypes = {
   entity: EntityNode,
   image: ImageNode,
   place: PlaceNode,
+};
+
+const edgeTypes = {
+  fade: FadeEdge,
 };
 
 export default function GraphVisualization({
@@ -545,13 +635,12 @@ export default function GraphVisualization({
       id: edge.id,
       source: edge.source,
       target: edge.target,
-      type: 'straight',
+      type: 'fade',
       label: '',
       style: {
         strokeWidth: Math.min(edge.weight * 2 + 2, 10),
         stroke: '#8b6f47',
         strokeDasharray: edge.weight > 1 ? '0' : '5,5',
-        opacity: 0.7,
       },
       labelStyle: {
         fill: '#654321',
@@ -664,7 +753,7 @@ export default function GraphVisualization({
           width: '100%', 
           height: '100%', 
           minHeight: '600px',
-          background: '#d4a574',
+          background: '#D7AB7C',
           position: 'relative',
         }}
         className="detective-board-bg"
@@ -678,6 +767,7 @@ export default function GraphVisualization({
           onNodeClick={onNodeClickHandler}
           onEdgeClick={onEdgeClickHandler}
           nodeTypes={nodeTypes}
+          edgeTypes={edgeTypes}
           fitView
           fitViewOptions={{ padding: 0.2 }}
           style={{ background: 'transparent' }}

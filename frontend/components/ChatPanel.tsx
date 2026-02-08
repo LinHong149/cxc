@@ -153,7 +153,9 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
           background: '#fff8dc',
         }}
       >
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src="/logo.png" alt="" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} />
+          <div>
           <h3
               style={{
                 margin: 0,
@@ -176,6 +178,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
             >
               {selectedNodes.length} {selectedNodes.length === 1 ? 'node' : 'nodes'} selected
             </p>
+          </div>
         </div>
         <button
           onClick={onClose}
@@ -278,6 +281,18 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
             }}
           >
             <div
+              style={{
+                display: 'flex',
+                flexDirection: message.role === 'user' ? 'row-reverse' : 'row',
+                alignItems: 'flex-end',
+                gap: '8px',
+                maxWidth: '100%',
+              }}
+            >
+              {message.role === 'assistant' && (
+                <img src="/logo.png" alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0, objectFit: 'cover' }} />
+              )}
+              <div
                 style={{
                   background: message.role === 'user' ? '#8b6f47' : '#fff8dc',
                   color: message.role === 'user' ? '#fef9e7' : '#654321',
@@ -298,6 +313,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
               >
                 {message.content}
               </div>
+            </div>
             <div
               style={{
                 fontSize: '10px',
@@ -315,9 +331,11 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
           <div
             style={{
               display: 'flex',
-              alignItems: 'flex-start',
+              alignItems: 'flex-end',
+              gap: '8px',
             }}
           >
+            <img src="/logo.png" alt="" style={{ width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0, objectFit: 'cover' }} />
             <div
               style={{
                 background: '#fff8dc',

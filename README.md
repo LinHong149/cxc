@@ -204,12 +204,12 @@ flowchart TD
     I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
     J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
     
-    style A fill:#e1f5ff
-    style C fill:#fff4e1
-    style E fill:#ffe1f5
-    style H fill:#e1ffe1
-    style J fill:#f5e1ff
-    style K fill:#ffe1e1
+    style A fill:#e1f5ff,color:#000000
+    style C fill:#fff4e1,color:#000000
+    style E fill:#ffe1f5,color:#000000
+    style H fill:#e1ffe1,color:#000000
+    style J fill:#f5e1ff,color:#000000
+    style K fill:#ffe1e1,color:#000000
 ```
 
 ---

@@ -166,7 +166,7 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
                 letterSpacing: '0.5px',
               }}
             >
-              Chat Assistant
+              Chat with Combs
             </h3>
             <p
               style={{

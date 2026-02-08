@@ -535,7 +535,7 @@ function ResultsPageContent() {
               style={{
                 position: 'absolute',
                 bottom: '70px',
-                left: '20px',
+                left: '60px',
                 width: '120px',
                 height: '120px',
                 zIndex: 1,

@@ -25,6 +25,9 @@ export default function Home() {
     setUploading(true);
     setError(null);
 
+    const startTime = Date.now();
+    const LOADING_DURATION_MS = 7000;
+
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -38,6 +41,12 @@ export default function Home() {
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to parse PDF');
+      }
+
+      // Artificial delay: ensure loading state shows for 7 seconds total
+      const elapsed = Date.now() - startTime;
+      if (elapsed < LOADING_DURATION_MS) {
+        await new Promise((resolve) => setTimeout(resolve, LOADING_DURATION_MS - elapsed));
       }
 
       // Toggle to the other output file when a new file is uploaded

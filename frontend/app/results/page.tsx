@@ -359,7 +359,23 @@ function ResultsPageContent() {
   const evidenceData = getEvidenceData();
 
   return (
-    <div style={{ height: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column', overflow: 'hidden' }} className="detective-board-bg">
+    <div style={{ height: '100vh', background: '#d4a574', display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }} className="detective-board-bg">
+      {/* Talking bear in corner - decorative background element */}
+      <img
+        src="/talking_bear.gif"
+        alt=""
+        style={{
+          position: 'absolute',
+          bottom: '20px',
+          left: '20px',
+          width: '120px',
+          height: '120px',
+          objectFit: 'contain',
+          zIndex: 0,
+          pointerEvents: 'none',
+          opacity: 0.7,
+        }}
+      />
       <header
         style={{
           background: '#fef9e7',
@@ -371,12 +387,17 @@ function ResultsPageContent() {
           boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
           fontFamily: "'Courier New', monospace",
           flexShrink: 0,
+          position: 'relative',
+          zIndex: 1,
         }}
       >
         <div>
-          <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#654321', fontFamily: "'Courier New', monospace" }}>
-            🕵️ TIMELINE DETECTIVE BOARD
-          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src="/logo.png" alt="Logo" style={{ height: '40px' }} />
+            <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#654321', fontFamily: "'Courier New', monospace" }}>
+              TIMELINE DETECTIVE BOARD
+            </h1>
+          </div>
           <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#8b6f47', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
             {graphData.nodes.length} {graphData.nodes.length === 1 ? 'ENTITY' : 'ENTITIES'} • {graphData.edges.length} {graphData.edges.length === 1 ? 'CONNECTION' : 'CONNECTIONS'}
             {selectedNodeIds.size > 0 && (
@@ -444,7 +465,8 @@ function ResultsPageContent() {
               }
             }}
           >
-            💬 {showChat ? 'Close Chat' : 'Chat'}
+            <img src="/logo.png" alt="Chat" style={{ height: '18px', verticalAlign: 'middle', marginRight: '6px' }} />
+            {showChat ? 'Close Chat' : 'Chat'}
           </button>
           <button
             onClick={() => router.push('/')}
@@ -477,7 +499,7 @@ function ResultsPageContent() {
         </div>
       </header>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'row', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'row', overflow: 'hidden', position: 'relative', zIndex: 1 }}>
         {/* Sidebar with Timeline Filter */}
         <div
           style={{

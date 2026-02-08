@@ -86,6 +86,7 @@ export default function Home() {
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <img src="/logo.png" alt="Logo" style={{ height: '64px', marginBottom: '16px' }} />
           <h1
             style={{
               fontSize: '32px',
@@ -96,7 +97,7 @@ export default function Home() {
               letterSpacing: '1px',
             }}
           >
-            🕵️ Timeline Detective Board
+            Timeline Detective Board
           </h1>
           <p style={{ fontSize: '14px', color: '#8b6f47', fontWeight: '600' }}>
             View case documents and toggle between different case files

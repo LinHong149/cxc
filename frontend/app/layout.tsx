@@ -4,6 +4,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'CXC - PDF Parser',
   description: 'Parse and analyze PDF documents',
+  icons: { icon: '/logo.png' },
 }
 
 export default function RootLayout({

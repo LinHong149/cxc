@@ -155,27 +155,27 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
       >
         <div>
           <h3
-            style={{
-              margin: 0,
-              fontSize: '16px',
-              fontWeight: '700',
-              color: '#654321',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-            }}
-          >
-            💬 Chat Assistant
-          </h3>
-          <p
-            style={{
-              margin: '4px 0 0 0',
-              fontSize: '11px',
-              color: '#8b6f47',
-              fontWeight: '600',
-            }}
-          >
-            {selectedNodes.length} {selectedNodes.length === 1 ? 'node' : 'nodes'} selected
-          </p>
+              style={{
+                margin: 0,
+                fontSize: '16px',
+                fontWeight: '700',
+                color: '#654321',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+              }}
+            >
+              Chat Assistant
+            </h3>
+            <p
+              style={{
+                margin: '4px 0 0 0',
+                fontSize: '11px',
+                color: '#8b6f47',
+                fontWeight: '600',
+              }}
+            >
+              {selectedNodes.length} {selectedNodes.length === 1 ? 'node' : 'nodes'} selected
+            </p>
         </div>
         <button
           onClick={onClose}
@@ -278,26 +278,26 @@ export default function ChatPanel({ selectedNodes, edges = [], onClose }: ChatPa
             }}
           >
             <div
-              style={{
-                background: message.role === 'user' ? '#8b6f47' : '#fff8dc',
-                color: message.role === 'user' ? '#fef9e7' : '#654321',
-                padding: '10px 14px',
-                borderRadius: '8px',
-                maxWidth: '85%',
-                fontSize: '13px',
-                lineHeight: '1.5',
-                border:
-                  message.role === 'user'
-                    ? 'none'
-                    : '1px solid #8b6f47',
-                boxShadow:
-                  message.role === 'user'
-                    ? '0 2px 4px rgba(0,0,0,0.2)'
-                    : 'none',
-              }}
-            >
-              {message.content}
-            </div>
+                style={{
+                  background: message.role === 'user' ? '#8b6f47' : '#fff8dc',
+                  color: message.role === 'user' ? '#fef9e7' : '#654321',
+                  padding: '10px 14px',
+                  borderRadius: '8px',
+                  maxWidth: '85%',
+                  fontSize: '13px',
+                  lineHeight: '1.5',
+                  border:
+                    message.role === 'user'
+                      ? 'none'
+                      : '1px solid #8b6f47',
+                  boxShadow:
+                    message.role === 'user'
+                      ? '0 2px 4px rgba(0,0,0,0.2)'
+                      : 'none',
+                }}
+              >
+                {message.content}
+              </div>
             <div
               style={{
                 fontSize: '10px',

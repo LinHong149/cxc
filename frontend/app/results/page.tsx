@@ -379,7 +379,7 @@ function ResultsPageContent() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <img src="/logo.png" alt="Logo" style={{ height: '40px' }} />
             <h1 style={{ margin: 0, fontSize: '24px', fontWeight: '700', color: '#654321', fontFamily: "'Courier New', monospace" }}>
-              TIMELINE DETECTIVE BOARD
+              SHERLOCK COMBS
             </h1>
           </div>
           <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#8b6f47', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -393,6 +393,7 @@ function ResultsPageContent() {
           <button
             onClick={handleFileToggle}
             style={{
+              display: 'none',
               padding: '10px 20px',
               background: selectedFile === 'output2.json' ? '#654321' : '#8b6f47',
               color: '#fef9e7',

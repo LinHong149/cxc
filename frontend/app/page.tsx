@@ -97,7 +97,7 @@ export default function Home() {
               letterSpacing: '1px',
             }}
           >
-            Timeline Detective Board
+            Sherlock Combs
           </h1>
           <p style={{ fontSize: '14px', color: '#8b6f47', fontWeight: '600' }}>
             View case documents and toggle between different case files

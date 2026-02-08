@@ -1,4 +1,4 @@
-# 🕵️ Timeline Detective Board — Document Entity Graph Explorer
+# 🕵️ Sherlock Combs — Document Entity Graph Explorer
 
 A hackathon-built AI-powered document analysis tool that transforms messy document dumps into an interactive detective-style investigation board.
 

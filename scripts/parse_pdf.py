@@ -1,5 +1,5 @@
 """
-PDF Parser for Timeline Detective Board
+PDF Parser for Sherlock Combs
 
 Parses PDF documents and extracts text per page with metadata,
 generating summaries and outputting in the NER input schema format.

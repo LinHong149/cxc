@@ -192,21 +192,29 @@ The key feature is time-based navigation:
 ## 📐 Architecture & Data Flow
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[DOJ Website] -->|Scrape Documents| B[Document Scraper]
     B -->|Raw PDFs/Documents| C[Raw Data Storage<br/>S3 / Local FS / Postgres]
-    C -->|Extract Text| D[PDF Parser<br/>pdfplumber]
-    D -->|Clean Text| E[NER Processing<br/>spaCy]
-    E -->|Extract Entities<br/>PERSON, ORG, GPE, DATE| F[Entity Mentions<br/>+ Evidence Snippets]
-    F -->|Build Relationships| G[Graph Construction<br/>Co-mention Analysis]
-    G -->|Store Graph| H[Graph Database<br/>Neo4j / Postgres + pgvector]
-    H -->|Query API| I[FastAPI Backend<br/>REST Endpoints]
-    I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
-    J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
     
     style A fill:#e1f5ff,color:#000000
     style C fill:#fff4e1,color:#000000
+```
+
+```mermaid
+flowchart LR
+    D[PDF Parser<br/>pdfplumber] -->|Clean Text| E[NER Processing<br/>spaCy]
+    E -->|Extract Entities<br/>PERSON, ORG, GPE, DATE| F[Entity Mentions<br/>+ Evidence Snippets]
+    F -->|Build Relationships| G[Graph Construction<br/>Co-mention Analysis]
+    
     style E fill:#ffe1f5,color:#000000
+```
+
+```mermaid
+flowchart LR
+    H[Graph Database<br/>Neo4j / Postgres + pgvector] -->|Query API| I[FastAPI Backend<br/>REST Endpoints]
+    I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
+    J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
+    
     style H fill:#e1ffe1,color:#000000
     style J fill:#f5e1ff,color:#000000
     style K fill:#ffe1e1,color:#000000

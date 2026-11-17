@@ -4,6 +4,128 @@ A hackathon-built AI-powered document analysis tool that transforms messy docume
 
 Upload documents → extract people/places/organizations → build evidence-backed connections → explore them through a timeline-driven graph interface.
 
+Built in 24 hours at cxc.
+
+![Investigation board](assets/home.png)
+
+---
+
+## 🚀 Inspiration
+
+Large investigative datasets (court filings, logs, reports, leaked archives, etc.) are difficult to navigate manually.
+
+We wanted to build a system that helps users answer questions like:
+- Who appears most often across documents?
+- Which people are mentioned together?
+- How do relationships change over time?
+- What connections emerge when you zoom into a specific date range?
+
+Inspired by investigative link analysis tools, we created a lightweight MVP in 24 hours.
+
+---
+
+## 🎯 What It Does
+
+This project takes in a collection of documents and automatically:
+
+### ✅ Extracts key entities:
+- People
+- Organizations
+- Locations
+- Dates
+
+### ✅ Builds a graph of relationships based on evidence:
+- Entities mentioned in the same sentence are connected
+- Each edge is backed by a source citation snippet
+
+![Evidence citations](assets/citations.png)
+
+### ✅ Provides an interactive UI:
+- Timeline scrubber filters connections over time
+- Detective board graph updates dynamically
+- Clicking an edge reveals the exact evidence text
+- Clicking a node shows all mentions across documents
+
+---
+
+## 🧠 How It Works
+
+### 1. Document Ingestion
+
+Documents are uploaded and converted into clean text.
+- PDFs are parsed using lightweight extraction tools
+- Each document is assigned a timestamp (from metadata or filename)
+
+### 2. Named Entity Recognition (NER)
+
+We run NLP-based entity extraction using spaCy:
+- `PERSON`
+- `ORG`
+- `GPE` (locations)
+- `DATE`
+
+Each entity mention is stored with:
+- Document ID
+- Page number
+- Exact text snippet
+- Timestamp
+
+### 3. Evidence-Backed Graph Construction
+
+Instead of guessing intent, we build only safe, source-grounded links:
+- If two entities appear in the same sentence → connect them
+- Edge weight increases with repeated co-occurrence
+- Every edge stores the best supporting snippets
+
+This produces an investigation graph like:
+
+```
+Person A ── mentioned_with ── Person B
+(evidence sentence attached)
+```
+
+### 4. Timeline-Sliced Detective Board
+
+The key feature is time-based navigation:
+- User selects a date window
+- Graph updates to show only nodes/edges active in that period
+- Relationships evolve as the timeline moves
+
+---
+
+## 📐 Architecture & Data Flow
+
+![System design](assets/system_design.png)
+
+```mermaid
+flowchart LR
+    A[DOJ Website] -->|Scrape Documents| B[Document Scraper]
+    B -->|Raw PDFs/Documents| C[Raw Data Storage<br/>S3 / Local FS / Postgres]
+    
+    style A fill:#e1f5ff,color:#000000
+    style C fill:#fff4e1,color:#000000
+```
+
+```mermaid
+flowchart LR
+    D[PDF Parser<br/>pdfplumber] -->|Clean Text| E[NER Processing<br/>spaCy]
+    E -->|Extract Entities<br/>PERSON, ORG, GPE, DATE| F[Entity Mentions<br/>+ Evidence Snippets]
+    F -->|Build Relationships| G[Graph Construction<br/>Co-mention Analysis]
+    
+    style E fill:#ffe1f5,color:#000000
+```
+
+```mermaid
+flowchart LR
+    H[Graph Database<br/>Neo4j / Postgres + pgvector] -->|Query API| I[FastAPI Backend<br/>REST Endpoints]
+    I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
+    J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
+    
+    style H fill:#e1ffe1,color:#000000
+    style J fill:#f5e1ff,color:#000000
+    style K fill:#ffe1e1,color:#000000
+```
+
 ---
 
 ## 🛠️ Setup & Installation
@@ -105,120 +227,6 @@ The frontend will automatically read `output.json` from the project root after y
 - Next.js 14 with TypeScript
 - React Flow for graph visualization
 - Tailwind CSS for styling
-
----
-
-## 🚀 Inspiration
-
-Large investigative datasets (court filings, logs, reports, leaked archives, etc.) are difficult to navigate manually.
-
-We wanted to build a system that helps users answer questions like:
-- Who appears most often across documents?
-- Which people are mentioned together?
-- How do relationships change over time?
-- What connections emerge when you zoom into a specific date range?
-
-Inspired by investigative link analysis tools, we created a lightweight MVP in 24 hours.
-
----
-
-## 🎯 What It Does
-
-This project takes in a collection of documents and automatically:
-
-### ✅ Extracts key entities:
-- People
-- Organizations
-- Locations
-- Dates
-
-### ✅ Builds a graph of relationships based on evidence:
-- Entities mentioned in the same sentence are connected
-- Each edge is backed by a source citation snippet
-
-### ✅ Provides an interactive UI:
-- Timeline scrubber filters connections over time
-- Detective board graph updates dynamically
-- Clicking an edge reveals the exact evidence text
-- Clicking a node shows all mentions across documents
-
----
-
-## 🧠 How It Works
-
-### 1. Document Ingestion
-
-Documents are uploaded and converted into clean text.
-- PDFs are parsed using lightweight extraction tools
-- Each document is assigned a timestamp (from metadata or filename)
-
-### 2. Named Entity Recognition (NER)
-
-We run NLP-based entity extraction using spaCy:
-- `PERSON`
-- `ORG`
-- `GPE` (locations)
-- `DATE`
-
-Each entity mention is stored with:
-- Document ID
-- Page number
-- Exact text snippet
-- Timestamp
-
-### 3. Evidence-Backed Graph Construction
-
-Instead of guessing intent, we build only safe, source-grounded links:
-- If two entities appear in the same sentence → connect them
-- Edge weight increases with repeated co-occurrence
-- Every edge stores the best supporting snippets
-
-This produces an investigation graph like:
-
-```
-Person A ── mentioned_with ── Person B
-(evidence sentence attached)
-```
-
-### 4. Timeline-Sliced Detective Board
-
-The key feature is time-based navigation:
-- User selects a date window
-- Graph updates to show only nodes/edges active in that period
-- Relationships evolve as the timeline moves
-
----
-
-## 📐 Architecture & Data Flow
-
-```mermaid
-flowchart LR
-    A[DOJ Website] -->|Scrape Documents| B[Document Scraper]
-    B -->|Raw PDFs/Documents| C[Raw Data Storage<br/>S3 / Local FS / Postgres]
-    
-    style A fill:#e1f5ff,color:#000000
-    style C fill:#fff4e1,color:#000000
-```
-
-```mermaid
-flowchart LR
-    D[PDF Parser<br/>pdfplumber] -->|Clean Text| E[NER Processing<br/>spaCy]
-    E -->|Extract Entities<br/>PERSON, ORG, GPE, DATE| F[Entity Mentions<br/>+ Evidence Snippets]
-    F -->|Build Relationships| G[Graph Construction<br/>Co-mention Analysis]
-    
-    style E fill:#ffe1f5,color:#000000
-```
-
-```mermaid
-flowchart LR
-    H[Graph Database<br/>Neo4j / Postgres + pgvector] -->|Query API| I[FastAPI Backend<br/>REST Endpoints]
-    I -->|Graph Data + Evidence| J[Frontend<br/>Next.js + React Flow]
-    J -->|Interactive Visualization| K[Detective Board UI<br/>Timeline + Graph]
-    
-    style H fill:#e1ffe1,color:#000000
-    style J fill:#f5e1ff,color:#000000
-    style K fill:#ffe1e1,color:#000000
-```
 
 ---
 
